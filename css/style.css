@@ -636,6 +636,44 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
 .faq__item p { padding: 0 18px 15px; font-size: 14px; color: var(--text-2); }
 
 /* ==========================================================================
+   鸣谢
+   ========================================================================== */
+.thanks { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+.thank {
+  position: relative;
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--steel);
+  border-radius: var(--radius);
+  background: linear-gradient(150deg, var(--surface-2), var(--bg-2));
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.thank:hover,
+.thank:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--line-2);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .4);
+}
+.thank__avatar {
+  width: 56px; height: 56px; flex: none; border-radius: 50%;
+  object-fit: cover; border: 1px solid rgba(127, 168, 201, .4); background: var(--bg-2);
+}
+.thank__body { min-width: 0; flex: 1 1 auto; }
+.thank__more { flex: none; font-size: 22px; line-height: 1; color: var(--steel); opacity: .6; }
+.thank:hover .thank__more { opacity: 1; }
+
+.thank__role {
+  margin-bottom: 8px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .14em;
+  color: var(--steel);
+}
+.thank__name { font-size: 21px; font-weight: 800; color: #fff; letter-spacing: .02em; }
+.thank__alt { margin-top: 3px; font-size: 13px; color: var(--text-3); }
+
+/* ==========================================================================
    页脚
    ========================================================================== */
 .footer {

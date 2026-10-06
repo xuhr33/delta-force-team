@@ -313,7 +313,7 @@
   /* ---------------------------------------------------------------------
      5b. 队员档案弹窗（大图展示）
      --------------------------------------------------------------------- */
-  var pfBox, pfArt, pfName, pfGid, pfStats, pfQuote, pfCount;
+  var pfBox, pfArt, pfName, pfGid, pfStats, pfQuote, pfCount, pfKicker, pfKickerEn;
   var pfList = [];
   var pfIndex = 0;
   var pfLastFocus = null;
@@ -328,14 +328,25 @@
     var m = pfList[pfIndex];
     if (!m) return;
 
+    var isStaff = (m.kind === 'staff');
+    if (pfKicker) pfKicker.textContent = isStaff ? '战队档案' : '队员档案';
+    if (pfKickerEn) pfKickerEn.textContent = isStaff ? 'Team Staff' : 'Player Profile';
+
     pfArt.src = avatarFor(m, null, true);
     pfArt.alt = (m.name || m.gameId) + ' 的干员立绘';
 
     pfName.textContent = m.name || m.gameId || '—';
-    /* 名字和 ID 一样时就不重复显示一行 */
-    pfGid.textContent = (m.gameId && m.gameId !== m.name) ? m.gameId : '';
+    /* 副标题：优先游戏 ID；名字和 ID 一样时不重复。教练这类用 alt */
+    pfGid.textContent =
+      (m.gameId && m.gameId !== m.name) ? m.gameId : (m.alt || '');
 
-    var stats = PF_FIELDS.map(function (f) {
+    /* 教练 / 顾问这类不是按「位置/段位」考的，只显示身份 */
+    var fields = isStaff
+      ? [{ key: 'role', label: '身份' }]
+      : PF_FIELDS;
+    if (isStaff && m.note) fields = fields.concat([{ key: 'note', label: '荣誉' }]);
+
+    var stats = fields.map(function (f) {
       var v = m[f.key];
       return h('div', null,
         h('dt', { text: f.label }),
@@ -390,6 +401,8 @@
     pfStats = $('#pfStats');
     pfQuote = $('#pfQuote');
     pfCount = $('#pfCount');
+    pfKicker = $('#pfKicker');
+    pfKickerEn = $('#pfKickerEn');
 
     $('#profileClose').addEventListener('click', closeProfile);
     $('#profilePrev').addEventListener('click', function () { pfMove(-1); });
@@ -404,6 +417,50 @@
       if (e.key === 'Escape') closeProfile();
       else if (e.key === 'ArrowLeft') pfMove(-1);
       else if (e.key === 'ArrowRight') pfMove(1);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     5c. 鸣谢
+     --------------------------------------------------------------------- */
+  function renderThanks() {
+    var list = $('#thanksList');
+    if (!list || typeof THANKS === 'undefined' || !THANKS) return;
+
+    if ($('#thanksTitle')) $('#thanksTitle').textContent = THANKS.title || '';
+    if ($('#thanksLead')) $('#thanksLead').textContent = THANKS.lead || '';
+
+    var people = THANKS.people || [];
+
+    list.replaceChildren.apply(list, people.map(function (p, i) {
+      var avatar = avatarFor(p, null, false);
+      var li = h('li', { class: 'thank reveal' },
+        h('img', { class: 'thank__avatar', src: avatar, alt: p.name + ' 的头像', loading: 'lazy' }),
+        h('div', { class: 'thank__body' },
+          h('p', { class: 'thank__role', text: p.role }),
+          h('p', { class: 'thank__name', text: p.name }),
+          p.alt ? h('p', { class: 'thank__alt', text: p.alt }) : null
+        ),
+        h('span', { class: 'thank__more', 'aria-hidden': 'true', text: '›' })
+      );
+      li.setAttribute('data-index', String(i));
+      li.setAttribute('tabindex', '0');
+      li.setAttribute('role', 'button');
+      li.setAttribute('aria-label', '查看 ' + p.name + ' 的档案');
+      return li;
+    }));
+
+    list.addEventListener('click', function (e) {
+      var card = e.target.closest('.thank');
+      if (!card) return;
+      openProfile(people, Number(card.getAttribute('data-index')) || 0);
+    });
+    list.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var card = e.target.closest('.thank');
+      if (!card) return;
+      e.preventDefault();
+      openProfile(people, Number(card.getAttribute('data-index')) || 0);
     });
   }
 
@@ -632,6 +689,7 @@
   renderStars();
   renderMembers();
   renderRecruit();
+  renderThanks();
 
   initReveal();
   initDrawer();

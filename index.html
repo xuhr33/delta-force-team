@@ -37,6 +37,7 @@
       <a href="#stars">明星队员</a>
       <a href="#members">队员名单</a>
       <a href="#join">加入我们</a>
+      <a href="#thanks">鸣谢</a>
     </nav>
 
     <a class="topnav__cta" href="#join">加入我们 <span aria-hidden="true">↗</span></a>
@@ -194,6 +195,18 @@
       </div>
     </section>
 
+    <!-- ============ 鸣谢 ============ -->
+    <section class="sec" id="thanks">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow">Acknowledgements</p>
+        <h2 class="sec__title" id="thanksTitle">这支队伍，是从他们开始的。</h2>
+        <p class="sec__lead" id="thanksLead"></p>
+      </header>
+
+      <!-- 由 js/data.js 的 THANKS 渲染 -->
+      <ul class="thanks" id="thanksList"></ul>
+    </section>
+
     <!-- ============ 页脚 ============ -->
     <footer class="footer">
       <div class="footer__brand">
@@ -222,7 +235,7 @@
       <span class="profile__corner profile__corner--br"></span>
 
       <header class="profile__top">
-        <span class="profile__kicker">队员档案<em>Player Profile</em></span>
+        <span class="profile__kicker"><span id="pfKicker">队员档案</span><em id="pfKickerEn">Player Profile</em></span>
         <span class="profile__team">
           <img src="images/logo.jpg" alt="">
           HIT 三角洲校队
