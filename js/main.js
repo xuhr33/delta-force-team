@@ -53,16 +53,18 @@
     return sum;
   }
 
-  function avatarFile(n) {
+  function avatarFile(n, big) {
     var k = n + 1;
-    return 'images/avatars/av' + (k < 10 ? '0' : '') + k + '.jpg';
+    var name = 'av' + (k < 10 ? '0' : '') + k + '.jpg';
+    return big ? 'images/avatars/' + name : 'images/avatars/small/' + name;
   }
 
-  function avatarFor(m, prevFile) {
+  /* big=true 时给弹窗用大图，否则用名单里的小图（省流量） */
+  function avatarFor(m, prevFile, big) {
     if (m.avatar) return m.avatar;
     var n = hashOf(m.name || m.gameId) % AVATAR_COUNT;
-    var file = avatarFile(n);
-    if (file === prevFile) file = avatarFile((n + 1) % AVATAR_COUNT);
+    var file = avatarFile(n, big);
+    if (file === prevFile) file = avatarFile((n + 1) % AVATAR_COUNT, big);
     return file;
   }
 
@@ -160,24 +162,34 @@
     if ($('#starsLead')) $('#starsLead').textContent = STARS.lead || '';
 
     var prevStar = null;
+    var starList = [];
 
-    list.replaceChildren.apply(list, (STARS.members || []).map(function (m) {
+    list.replaceChildren.apply(list, (STARS.members || []).map(function (m, i) {
       var src = avatarFor(m, prevStar);
       prevStar = src;
-      return h('li', { class: 'star reveal' },
+      starList.push(m);
+      var li = h('li', { class: 'star reveal' },
         h('img', {
           class: 'star__avatar',
           src: src,
-          alt: m.name + ' 的头像',
+          alt: (m.name || m.gameId) + ' 的头像',
           loading: 'lazy'
         }),
         h('div', { class: 'star__body' },
-          h('p', { class: 'star__name', text: m.name }),
+          h('p', { class: 'star__name', text: m.name || m.gameId }),
           m.gameId ? h('p', { class: 'star__gid', text: m.gameId }) : null,
           m.note ? h('p', { class: 'star__note', text: m.note }) : null
         )
       );
+      li.setAttribute('data-index', String(i));
+      return li;
     }));
+
+    list.addEventListener('click', function (e) {
+      var card = e.target.closest('.star');
+      if (!card) return;
+      openProfile(starList, Number(card.getAttribute('data-index')) || 0);
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -195,6 +207,7 @@
 
     var nodes = [];
     var prevAvatar = null;
+    var rosterList = [];   /* 弹窗里可以左右翻页的次序 */
 
     /* 重点队员（指挥官等） */
     MEMBERS.filter(function (m) { return m.lead; }).forEach(function (m) {
@@ -233,7 +246,7 @@
       }
 
       var hasDetail = rows.length > 0;
-      var displayName = m.name || m.gameId;
+      var displayName = m.gameId || m.name;
 
       var mSrc = avatarFor(m, prevAvatar);
       prevAvatar = mSrc;
@@ -241,10 +254,7 @@
       var rowKids = [
         h('img', { class: 'member__avatar', src: mSrc, alt: displayName + ' 的头像', loading: 'lazy' }),
         h('div', { class: 'member__id' },
-          h('h3', { class: 'member__name', text: displayName }),
-          (m.gameId && m.gameId !== displayName)
-            ? h('p', { class: 'member__gid', text: m.gameId })
-            : null
+          h('h3', { class: 'member__name', text: displayName })
         )
       ];
 
@@ -266,7 +276,10 @@
         kids.push(h('div', { class: 'member__detail', id: detailId, hidden: 'hidden' }, rows));
       }
 
-      nodes.push(h('li', { class: 'card card--member reveal' }, kids));
+      var li = h('li', { class: 'card card--member reveal' }, kids);
+      li.setAttribute('data-index', String(rosterList.length));
+      rosterList.push(m);
+      nodes.push(li);
     });
 
     list.replaceChildren.apply(list, nodes);
@@ -285,6 +298,112 @@
 
       var label = btn.querySelector('.expand__label');
       if (label) label.textContent = willOpen ? '收起资料' : '展开资料';
+    });
+
+    /* 点整张卡片弹大图（点「展开资料」按钮时不弹） */
+    list.addEventListener('click', function (e) {
+      if (e.target.closest('.expand')) return;
+      var card = e.target.closest('.card--member');
+      if (!card) return;
+      var i = Number(card.getAttribute('data-index'));
+      openProfile(rosterList, isNaN(i) ? 0 : i);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     5b. 队员档案弹窗（大图展示）
+     --------------------------------------------------------------------- */
+  var pfBox, pfArt, pfName, pfGid, pfStats, pfQuote, pfCount;
+  var pfList = [];
+  var pfIndex = 0;
+  var pfLastFocus = null;
+
+  var PF_FIELDS = [
+    { key: 'role',   label: '位置' },
+    { key: 'rank',   label: '段位' },
+    { key: 'joined', label: '入队时间' }
+  ];
+
+  function pfRender() {
+    var m = pfList[pfIndex];
+    if (!m) return;
+
+    pfArt.src = avatarFor(m, null, true);
+    pfArt.alt = (m.name || m.gameId) + ' 的干员立绘';
+
+    pfName.textContent = m.name || m.gameId || '—';
+    /* 名字和 ID 一样时就不重复显示一行 */
+    pfGid.textContent = (m.gameId && m.gameId !== m.name) ? m.gameId : '';
+
+    var stats = PF_FIELDS.map(function (f) {
+      var v = m[f.key];
+      return h('div', null,
+        h('dt', { text: f.label }),
+        h('dd', { class: v ? null : 'is-empty', text: v || '待补充' })
+      );
+    });
+    if (m.note) {
+      stats.push(h('div', null,
+        h('dt', { text: '荣誉' }),
+        h('dd', { text: m.note })
+      ));
+    }
+    pfStats.replaceChildren.apply(pfStats, stats);
+
+    pfQuote.textContent = m.quote ? '「' + m.quote + '」' : '';
+    pfCount.textContent = (pfIndex + 1) + ' / ' + pfList.length;
+  }
+
+  function pfMove(step) {
+    if (!pfList.length) return;
+    pfIndex = (pfIndex + step + pfList.length) % pfList.length;
+    pfRender();
+  }
+
+  function openProfile(list, index) {
+    if (!pfBox || !list || !list.length) return;
+    pfList = list;
+    pfIndex = Math.max(0, Math.min(index, list.length - 1));
+    pfLastFocus = document.activeElement;
+
+    pfRender();
+    $('#profile').hidden = false;
+    document.body.style.overflow = 'hidden';
+    $('#profileClose').focus();
+  }
+
+  function closeProfile() {
+    if (!pfBox || $('#profile').hidden) return;
+    $('#profile').hidden = true;
+    document.body.style.overflow = '';
+    if (pfLastFocus && pfLastFocus.focus) pfLastFocus.focus();
+  }
+
+  function initProfile() {
+    var box = $('#profile');
+    if (!box) return;
+
+    pfBox = box;
+    pfArt = $('#pfArt');
+    pfName = $('#pfName');
+    pfGid = $('#pfGid');
+    pfStats = $('#pfStats');
+    pfQuote = $('#pfQuote');
+    pfCount = $('#pfCount');
+
+    $('#profileClose').addEventListener('click', closeProfile);
+    $('#profilePrev').addEventListener('click', function () { pfMove(-1); });
+    $('#profileNext').addEventListener('click', function () { pfMove(1); });
+
+    box.addEventListener('click', function (e) {
+      if (e.target.closest('[data-close]')) closeProfile();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') closeProfile();
+      else if (e.key === 'ArrowLeft') pfMove(-1);
+      else if (e.key === 'ArrowRight') pfMove(1);
     });
   }
 
@@ -517,6 +636,7 @@
   initReveal();
   initDrawer();
   initSpy();
+  initProfile();
   initToTop();
   initCopy();
 

@@ -51,7 +51,7 @@
     <div class="hero__shade"></div>
 
     <div class="hero__inner">
-      <p class="hero__eyebrow">《三角洲行动》端游 · 手游双端校队</p>
+      <p class="hero__eyebrow">《三角洲行动》全面战场校队</p>
 
       <h1 class="hero__title">
         <span class="hero__title-a">HIT</span>
@@ -205,6 +205,52 @@
 
   </div><!-- /.wrap -->
 </main>
+
+<!-- ==================== 队员档案弹窗 ==================== -->
+<div class="profile" id="profile" hidden>
+  <div class="profile__scrim" data-close></div>
+
+  <div class="profile__box" role="dialog" aria-modal="true" aria-labelledby="pfName">
+    <button class="profile__close" type="button" id="profileClose" aria-label="关闭">✕</button>
+    <button class="profile__nav profile__nav--prev" type="button" id="profilePrev" aria-label="上一位">‹</button>
+    <button class="profile__nav profile__nav--next" type="button" id="profileNext" aria-label="下一位">›</button>
+
+    <div class="profile__frame">
+      <span class="profile__corner profile__corner--tl"></span>
+      <span class="profile__corner profile__corner--tr"></span>
+      <span class="profile__corner profile__corner--bl"></span>
+      <span class="profile__corner profile__corner--br"></span>
+
+      <header class="profile__top">
+        <span class="profile__kicker">队员档案<em>Player Profile</em></span>
+        <span class="profile__team">
+          <img src="images/logo.jpg" alt="">
+          HIT 三角洲校队
+        </span>
+      </header>
+
+      <div class="profile__body">
+        <figure class="profile__art">
+          <img id="pfArt" src="" alt="">
+        </figure>
+
+        <div class="profile__info">
+          <p class="profile__plate" id="pfName"></p>
+          <p class="profile__gid" id="pfGid"></p>
+
+          <dl class="profile__stats" id="pfStats"></dl>
+
+          <blockquote class="profile__quote" id="pfQuote"></blockquote>
+        </div>
+      </div>
+
+      <footer class="profile__foot">
+        <span>HIT DELTA TEAM</span>
+        <span class="profile__count" id="pfCount"></span>
+      </footer>
+    </div>
+  </div>
+</div>
 
 <!-- 回到顶部 -->
 <button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>

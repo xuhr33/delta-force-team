@@ -32,7 +32,7 @@ var STARS = {
     { name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', note: '国家队预选赛队员' },
     { name: 'bbbing',  gameId: 'HIT、bbbing',  note: '国家队预选赛队员' },
     { name: 'MAVZ',    gameId: 'HIT、MAVZ',    note: '国家队预选赛队员' },
-    { name: '茉铭',    gameId: '',             note: '国家队预选赛队员 · 校友' },
+    { name: '茉铭',    gameId: '',             note: '国家队预选赛队员' },
     { name: '江河之情', gameId: 'HIT、江河之情', note: '国家队预选赛队员' }
   ]
 };
