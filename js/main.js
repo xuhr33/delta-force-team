@@ -193,123 +193,167 @@
   }
 
   /* ---------------------------------------------------------------------
-     5. 队员名单（lead:true 的提出来做重点卡）
+     5. 队员名单（按所属队伍分组，lead:true 的做成满宽重点卡）
      --------------------------------------------------------------------- */
+  var MEMBER_FIELDS = [
+    { key: 'role',   label: '位置' },
+    { key: 'rank',   label: '段位' },
+    { key: 'joined', label: '入队时间' }
+  ];
+  var TEAM_ORDER = ['A 队', 'B 队', 'C 队', 'D 队', 'E 队'];
+
+  /* 满宽重点卡（指挥官这类） */
+  function buildLeadCard(m, src, idx) {
+    var li = h('li', { class: 'leadcard reveal' },
+      h('img', { class: 'leadcard__avatar', src: src, alt: (m.name || m.gameId) + ' 的头像' }),
+      h('div', { class: 'leadcard__body' },
+        h('div', { class: 'leadcard__badges' },
+          h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
+          m.team ? h('span', {
+            class: 'leadcard__badge leadcard__badge--cap',
+            text: m.team + (m.captain ? '队长' : '')
+          }) : null
+        ),
+        h('p', { class: 'leadcard__name', text: m.name || m.gameId }),
+        m.gameId ? h('p', { class: 'leadcard__gid', text: m.gameId }) : null,
+        m.quote ? h('p', { class: 'leadcard__quote', text: '「' + m.quote + '」' }) : null
+      )
+    );
+    li.setAttribute('data-index', String(idx));
+    return li;
+  }
+
+  /* 普通队员卡 */
+  function buildMemberCard(m, src, idx) {
+    var detailId = 'memberDetail' + idx;
+    var rows = [];
+
+    MEMBER_FIELDS.forEach(function (f) {
+      if (!m[f.key]) return;
+      rows.push(h('div', null,
+        h('span', { class: 'detail__label', text: f.label }),
+        h('span', { class: 'detail__value', text: m[f.key] })
+      ));
+    });
+    if (m.quote) {
+      rows.push(h('div', { class: 'detail--wide' },
+        h('span', { class: 'detail__label', text: '一句话' }),
+        h('span', { class: 'detail__value detail__value--quote', text: '「' + m.quote + '」' })
+      ));
+    }
+
+    var hasDetail = rows.length > 0;
+    var displayName = m.gameId || m.name;
+
+    var rowKids = [
+      h('img', { class: 'member__avatar', src: src, alt: displayName + ' 的头像', loading: 'lazy' }),
+      h('div', { class: 'member__id' },
+        h('h3', { class: 'member__name' }, displayName, teamBadge(m))
+      )
+    ];
+
+    if (hasDetail) {
+      rowKids.push(h('button', {
+        class: 'expand',
+        type: 'button',
+        'aria-expanded': 'false',
+        'aria-controls': detailId,
+        'data-target': detailId
+      },
+        h('span', { class: 'expand__label', text: '展开资料' }),
+        h('span', { class: 'expand__icon', 'aria-hidden': 'true', text: '▾' })
+      ));
+    }
+
+    var kids = [h('div', { class: 'member__row' }, rowKids)];
+    if (hasDetail) {
+      kids.push(h('div', { class: 'member__detail', id: detailId, hidden: 'hidden' }, rows));
+    }
+
+    var li = h('li', { class: 'card card--member reveal' }, kids);
+    li.setAttribute('data-index', String(idx));
+    return li;
+  }
+
   function renderMembers() {
     var list = $('#memberList');
     if (!list || typeof MEMBERS === 'undefined') return;
 
-    var FIELDS = [
-      { key: 'role',   label: '位置' },
-      { key: 'rank',   label: '段位' },
-      { key: 'joined', label: '入队时间' }
-    ];
-
-    var nodes = [];
-    var prevAvatar = null;
-    var rosterList = [];   /* 弹窗里可以左右翻页的次序 */
-
-    /* 重点队员（指挥官等） */
-    MEMBERS.filter(function (m) { return m.lead; }).forEach(function (m) {
-      var src = avatarFor(m, prevAvatar);
-      prevAvatar = src;
-      nodes.push(h('li', { class: 'leadcard reveal' },
-        h('img', { class: 'leadcard__avatar', src: src, alt: m.name + ' 的头像' }),
-        h('div', { class: 'leadcard__body' },
-          h('div', { class: 'leadcard__badges' },
-            h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
-            m.team ? h('span', { class: 'leadcard__badge leadcard__badge--cap', text: m.team + '队长' }) : null
-          ),
-          h('p', { class: 'leadcard__name', text: m.name }),
-          m.gameId ? h('p', { class: 'leadcard__gid', text: m.gameId }) : null,
-          m.quote ? h('p', { class: 'leadcard__quote', text: '「' + m.quote + '」' }) : null
-        )
-      ));
+    /* 1. 按队伍分桶 */
+    var buckets = {};
+    MEMBERS.forEach(function (m) {
+      var k = m.team || '未分队';
+      (buckets[k] = buckets[k] || []).push(m);
     });
 
-    /* 其余队员 */
-    MEMBERS.filter(function (m) { return !m.lead; }).forEach(function (m, i) {
-      var detailId = 'memberDetail' + i;
-      var rows = [];
+    var keys = TEAM_ORDER.filter(function (k) { return buckets[k]; });
+    Object.keys(buckets).forEach(function (k) {
+      if (keys.indexOf(k) < 0) keys.push(k);
+    });
 
-      FIELDS.forEach(function (f) {
-        if (m[f.key]) {
-          rows.push(h('div', null,
-            h('span', { class: 'detail__label', text: f.label }),
-            h('span', { class: 'detail__value', text: m[f.key] })
-          ));
-        }
+    /* 2. 组内把队长排到最前，然后拍平成一维顺序 */
+    var rosterList = [];
+    keys.forEach(function (k) {
+      buckets[k].slice()
+        .sort(function (a, b) { return (b.captain ? 1 : 0) - (a.captain ? 1 : 0); })
+        .forEach(function (m) { rosterList.push(m); });
+    });
+
+    /* 3. 按这个顺序分配头像（相邻不撞脸） */
+    var prev = null;
+    var avatars = rosterList.map(function (m) {
+      var s = avatarFor(m, prev);
+      prev = s;
+      return s;
+    });
+
+    /* 4. 逐组画出来 */
+    var pos = 0;
+    var groups = keys.map(function (k) {
+      var people = rosterList.slice(pos, pos + buckets[k].length);
+      var start = pos;
+      pos += buckets[k].length;
+
+      var cards = people.map(function (m, i) {
+        var idx = start + i;
+        return m.lead ? buildLeadCard(m, avatars[idx], idx)
+                      : buildMemberCard(m, avatars[idx], idx);
       });
 
-      if (m.quote) {
-        rows.push(h('div', { class: 'detail--wide' },
-          h('span', { class: 'detail__label', text: '一句话' }),
-          h('span', { class: 'detail__value detail__value--quote', text: '「' + m.quote + '」' })
-        ));
-      }
+      var captain = people.filter(function (m) { return m.captain; })[0];
+      var meta = people.length + ' 人' + (captain ? ' · 队长 ' + (captain.name || captain.gameId) : '');
 
-      var hasDetail = rows.length > 0;
-      var displayName = m.gameId || m.name;
-
-      var mSrc = avatarFor(m, prevAvatar);
-      prevAvatar = mSrc;
-
-      var rowKids = [
-        h('img', { class: 'member__avatar', src: mSrc, alt: displayName + ' 的头像', loading: 'lazy' }),
-        h('div', { class: 'member__id' },
-          h('h3', { class: 'member__name' },
-            displayName,
-            teamBadge(m)
-          )
-        )
-      ];
-
-      if (hasDetail) {
-        rowKids.push(h('button', {
-          class: 'expand',
-          type: 'button',
-          'aria-expanded': 'false',
-          'aria-controls': detailId,
-          'data-target': detailId
-        },
-          h('span', { class: 'expand__label', text: '展开资料' }),
-          h('span', { class: 'expand__icon', 'aria-hidden': 'true', text: '▾' })
-        ));
-      }
-
-      var kids = [h('div', { class: 'member__row' }, rowKids)];
-      if (hasDetail) {
-        kids.push(h('div', { class: 'member__detail', id: detailId, hidden: 'hidden' }, rows));
-      }
-
-      var li = h('li', { class: 'card card--member reveal' }, kids);
-      li.setAttribute('data-index', String(rosterList.length));
-      rosterList.push(m);
-      nodes.push(li);
+      return h('section', {
+        class: 'tgroup',
+        'data-team': /^[A-E]/.test(k) ? k.charAt(0) : ''
+      },
+        h('div', { class: 'tgroup__head' },
+          h('span', { class: 'tgroup__name', text: k }),
+          h('span', { class: 'tgroup__meta', text: meta })
+        ),
+        h('ul', { class: 'cards cards--roster' }, cards)
+      );
     });
 
-    list.replaceChildren.apply(list, nodes);
+    list.replaceChildren.apply(list, groups);
 
-    /* 「展开资料」手风琴（事件委托，一次绑定） */
+    /* 「展开资料」手风琴 */
     list.addEventListener('click', function (e) {
       var btn = e.target.closest('.expand');
       if (!btn) return;
-
       var detail = document.getElementById(btn.getAttribute('data-target'));
       if (!detail) return;
-
       var willOpen = btn.getAttribute('aria-expanded') !== 'true';
       btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
       detail.hidden = !willOpen;
-
       var label = btn.querySelector('.expand__label');
       if (label) label.textContent = willOpen ? '收起资料' : '展开资料';
     });
 
-    /* 点整张卡片弹大图（点「展开资料」按钮时不弹） */
+    /* 点卡片弹档案（点「展开资料」按钮时不弹） */
     list.addEventListener('click', function (e) {
       if (e.target.closest('.expand')) return;
-      var card = e.target.closest('.card--member');
+      var card = e.target.closest('.card--member, .leadcard');
       if (!card) return;
       var i = Number(card.getAttribute('data-index'));
       openProfile(rosterList, isNaN(i) ? 0 : i);

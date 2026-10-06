@@ -352,6 +352,35 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
 .leadcard__quote { margin-top: 8px; font-size: 14px; color: rgba(255,255,255,.76); }
 
 /* --- 队员卡片 --- */
+/* ==========================================================================
+   队伍分组
+   ========================================================================== */
+.tgroup { margin-bottom: 30px; }
+.tgroup:last-child { margin-bottom: 0; }
+
+.tgroup__head {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.tgroup__name {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 18px; font-weight: 800; letter-spacing: .05em; color: #fff;
+}
+.tgroup__name::before {
+  content: ""; width: 4px; height: 19px; border-radius: 2px;
+  background: var(--team, var(--accent));
+  box-shadow: 0 0 12px var(--team, var(--accent));
+}
+.tgroup__meta { font-size: 12.5px; color: var(--text-3); }
+
+/* 每支队伍一个颜色（和干员头像的色调对应） */
+.tgroup[data-team="A"] { --team: #22C55E; }
+.tgroup[data-team="B"] { --team: #7FA8C9; }
+.tgroup[data-team="C"] { --team: #F0B563; }
+.tgroup[data-team="D"] { --team: #C79BF0; }
+.tgroup[data-team="E"] { --team: #6FE3D0; }
+
 .card--member { padding: 15px 20px; }
 .member__row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; }
 .member__avatar {
@@ -363,14 +392,19 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
   display: flex; align-items: center; flex-wrap: wrap; gap: 9px;
   font-size: 17px; color: #fff;
 }
-/* 队长标记 */
+/* 队伍标记（颜色跟随所属队伍） */
 .capbadge {
   padding: 2px 10px; border-radius: var(--radius-pill);
-  border: 1px solid rgba(127, 168, 201, .45);
-  background: rgba(127, 168, 201, .14);
-  color: var(--steel);
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(255, 255, 255, .06);
+  color: var(--team, var(--steel));
   font-size: 11px; font-weight: 700; letter-spacing: .04em;
   white-space: nowrap;
+}
+.capbadge::before {
+  content: ""; display: inline-block;
+  width: 5px; height: 5px; margin-right: 6px; border-radius: 50%;
+  background: currentColor; vertical-align: 1px;
 }
 .member__gid { font-size: 12.5px; letter-spacing: .04em; color: rgba(255,255,255,.45); }
 
