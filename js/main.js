@@ -339,6 +339,15 @@
       );
     });
 
+    /* 彩蛋①：名单末尾留一个几乎看不见的空位 */
+    groups.push(h('button', {
+      class: 'ghostslot', type: 'button', id: 'ghostSlot',
+      'aria-label': '看看最后一个位置'
+    },
+      h('span', { class: 'ghostslot__mark', 'aria-hidden': 'true', text: '?' }),
+      h('span', { class: 'ghostslot__text', text: '下一个 · 等你' })
+    ));
+
     list.replaceChildren.apply(list, groups);
 
     /* 「展开资料」手风琴 */
@@ -357,12 +366,22 @@
     /* 点卡片弹档案（点「展开资料」按钮时不弹） */
     list.addEventListener('click', function (e) {
       if (e.target.closest('.expand')) return;
+      if (e.target.closest('#ghostSlot')) { openGhost(); return; }
       var card = e.target.closest('.card--member, .leadcard');
       if (!card) return;
       var i = Number(card.getAttribute('data-index'));
       openProfile(rosterList, isNaN(i) ? 0 : i);
     });
   }
+
+  /* 彩蛋①：空位打开的「档案」 */
+  var GHOST = {
+    placeholder: true,
+    name: '下一个',
+    quote: '这个位置还空着 —— 想填的话，加 QQ 群 541072642。'
+  };
+
+  function openGhost() { openProfile([GHOST], 0); }
 
   /* ---------------------------------------------------------------------
      5b. 队员档案弹窗（大图展示）
@@ -390,11 +409,25 @@
     if (!m) return;
 
     var isStaff = (m.kind === 'staff');
-    if (pfKicker) pfKicker.textContent = isStaff ? '战队档案' : '队员档案';
-    if (pfKickerEn) pfKickerEn.textContent = isStaff ? 'Team Staff' : 'Player Profile';
+    var kicker = m.placeholder ? '待补位' : (isStaff ? '战队档案' : '队员档案');
+    var kickerEn = m.placeholder ? 'Open Slot' : (isStaff ? 'Team Staff' : 'Player Profile');
+    if (pfKicker) pfKicker.textContent = kicker;
+    if (pfKickerEn) pfKickerEn.textContent = kickerEn;
 
-    pfArt.src = avatarFor(m, null, true);
-    pfArt.alt = (m.name || m.gameId) + ' 的干员立绘';
+    /* 空位不出干员图，用一个问号占位 */
+    var artBox = pfArt.parentNode;
+    var mark = artBox.querySelector('.profile__mark');
+    if (m.placeholder) {
+      artBox.classList.add('profile__art--empty');
+      pfArt.style.display = 'none';
+      if (!mark) artBox.appendChild(h('span', { class: 'profile__mark', 'aria-hidden': 'true', text: '?' }));
+    } else {
+      artBox.classList.remove('profile__art--empty');
+      if (mark) mark.remove();
+      pfArt.style.display = '';
+      pfArt.src = avatarFor(m, null, true);
+      pfArt.alt = (m.name || m.gameId) + ' 的干员立绘';
+    }
 
     pfName.textContent = m.name || m.gameId || '—';
     /* 副标题：优先游戏 ID；名字和 ID 一样时不重复。教练这类用 alt */
@@ -423,8 +456,14 @@
     pfStats.replaceChildren.apply(pfStats, stats);
     pfStats.hidden = stats.length === 0;
 
-    pfQuote.textContent = m.quote ? '「' + m.quote + '」' : '';
-    pfCount.textContent = (pfIndex + 1) + ' / ' + pfList.length;
+    pfQuote.textContent = m.quote ? (m.placeholder ? m.quote : '「' + m.quote + '」') : '';
+
+    /* 只有一个人时不显示左右翻页 */
+    var multi = pfList.length > 1;
+    var prev = $('#profilePrev'), next = $('#profileNext');
+    if (prev) prev.hidden = !multi;
+    if (next) next.hidden = !multi;
+    pfCount.textContent = multi ? (pfIndex + 1) + ' / ' + pfList.length : '';
   }
 
   function pfMove(step) {
@@ -690,6 +729,59 @@
   }
 
   /* ---------------------------------------------------------------------
+     10b. 彩蛋②：连点队徽 5 次 → 全员集结
+     --------------------------------------------------------------------- */
+  function initRally() {
+    var box = $('#rally');
+    var grid = $('#rallyGrid');
+    var brand = $('.topnav__brand');
+    if (!box || !grid || !brand) return;
+
+    var loaded = false;
+
+    /* 15 张干员头像，首次打开时才去加载，不拖慢首页 */
+    function build() {
+      if (loaded) return;
+      loaded = true;
+      var cells = [];
+      for (var i = 1; i <= AVATAR_COUNT; i++) {
+        var k = (i < 10 ? '0' : '') + i;
+        var img = h('img', { alt: '' });
+        img.style.animationDelay = (0.04 + (i - 1) * 0.07).toFixed(2) + 's';
+        img.src = 'images/avatars/av' + k + '.jpg';
+        cells.push(h('li', null, img));
+      }
+      grid.replaceChildren.apply(grid, cells);
+    }
+
+    function open() {
+      build();
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      box.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    var clicks = 0, timer = null;
+    brand.addEventListener('click', function (e) {
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(function () { clicks = 0; }, 1400);
+      if (clicks < 5) return;
+      clicks = 0;
+      e.preventDefault();
+      open();
+    });
+
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (!box.hidden && e.key === 'Escape') close();
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      11. 提示条 + 复制群号
      --------------------------------------------------------------------- */
   var toastEl;
@@ -757,6 +849,7 @@
   initDrawer();
   initSpy();
   initProfile();
+  initRally();
   initToTop();
   initCopy();
 
