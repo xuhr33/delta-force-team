@@ -1,0 +1,7 @@
+# 系统 / 编辑器产物，不需要进仓库
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+.idea/
+.vscode/

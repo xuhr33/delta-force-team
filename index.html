@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>哈尔滨工业大学三角洲行动校队</title>
+<meta name="description" content="哈尔滨工业大学三角洲行动校队官方主页：队伍简介、比赛战绩、队员名单、比赛图集与招新信息。">
+<meta name="theme-color" content="#3B0843">
+<link rel="icon" href="images/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#about">跳到主要内容</a>
+
+<!-- ==================== 顶部导航 ==================== -->
+<header class="topnav" id="topnav">
+  <div class="topnav__inner">
+
+    <a class="topnav__brand" href="#top">
+      <img class="topnav__logo" src="images/logo.jpg" alt="哈工大三角洲校队队徽">
+      <span class="topnav__names">
+        <strong>HIT 三角洲校队</strong>
+        <em>哈尔滨工业大学</em>
+      </span>
+    </a>
+
+    <button class="topnav__toggle" id="menuBtn" type="button"
+            aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="topnav__menu" id="navMenu" aria-label="主导航">
+      <a href="#top">首页</a>
+      <a href="#about">队伍简介</a>
+      <a href="#achievements">战绩荣誉</a>
+      <a href="#members">队员名单</a>
+      <a href="#gallery">比赛图集</a>
+      <a href="#join">加入我们</a>
+    </nav>
+
+    <a class="topnav__cta" href="#join">加入我们 <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==================== 首屏 ==================== -->
+  <section class="hero" id="top">
+    <img class="hero__bg" src="images/hero.svg" alt="哈尔滨工业大学三角洲行动校队合照">
+    <div class="hero__shade"></div>
+
+    <div class="hero__inner">
+      <!-- ↓↓ 改这里：首屏小字 ↓↓ -->
+      <p class="hero__eyebrow">《三角洲行动》校队 · 哈尔滨工业大学</p>
+
+      <!-- ↓↓ 改这里：两行大标题（第二行是强调色）↓↓ -->
+      <h1 class="hero__title">
+        <span class="hero__title-a">HIT</span>
+        <span class="hero__title-b">DELTA TEAM</span>
+      </h1>
+
+      <!-- ↓↓ 改这里：主标语 ↓↓ -->
+      <p class="hero__headline">在三角洲的战场上，<br>我们代表哈工大。</p>
+
+      <!-- ↓↓ 改这里：首屏简介 ↓↓ -->
+      <p class="hero__desc">覆盖端游与手游，固定编制、战术部署、分组对抗与赛后复盘。我们把每一名队员的能力，连成一支稳定可靠的作战力量。</p>
+
+      <div class="hero__actions">
+        <a class="btn btn--accent" href="#join">申请加入</a>
+        <a class="btn btn--ghost" href="#achievements">查看战绩</a>
+      </div>
+    </div>
+
+    <!-- 数字由 js/data.js 的 STATS 渲染 -->
+    <ul class="hero__stats" id="statsList" aria-label="队伍数据"></ul>
+
+    <a class="hero__scroll" href="#about">向下探索 <span aria-hidden="true"></span></a>
+  </section>
+
+  <div class="wrap">
+
+    <!-- ============ 队伍简介 ============ -->
+    <section class="panel" id="about">
+      <div class="panel__head">
+        <h2 class="panel__title">队伍简介</h2>
+        <span class="panel__tag">About</span>
+      </div>
+
+      <div class="about__text">
+        <!-- ↓↓ 改这里：队伍简介，150-250 字 ↓↓ -->
+        <p>哈尔滨工业大学三角洲行动校队成立于 2023 年，是由在校学生自发组织的电子竞技队伍。队伍以《三角洲行动》为主要训练项目，现役队员二十余人，按指挥、突击、侦察、支援四个位置分组训练。</p>
+        <p>队伍每周固定训练三次，内容包括地图战术推演、分组对抗和录像复盘。我们不追求个人枪法的高光时刻，更看重一次成功的报点、一次及时的补枪、一次默契的换位。稳定的沟通和执行力，是我们判断一名队员是否合格的第一标准。</p>
+        <p>如果你也想在赛场上和一群靠谱的人并肩作战，欢迎看看下面的招新信息。</p>
+      </div>
+    </section>
+
+    <!-- ============ 战绩荣誉 ============ -->
+    <section class="panel" id="achievements">
+      <div class="panel__head">
+        <h2 class="panel__title">战绩荣誉</h2>
+        <span class="panel__tag">Honours</span>
+      </div>
+      <p class="panel__lead">从校内赛到全国赛，我们一步步打上来。</p>
+
+      <!-- 荣誉焦点由 js/data.js 的 HIGHLIGHT 渲染（设为 null 则整块消失） -->
+      <div class="honor" id="honorHighlight"></div>
+
+      <!-- 战绩由 js/data.js 的 ACHIEVEMENTS 渲染 -->
+      <ol class="cards" id="achievementList"></ol>
+    </section>
+
+    <!-- ============ 队员名单 ============ -->
+    <section class="panel" id="members">
+      <div class="panel__head">
+        <h2 class="panel__title">队员名单</h2>
+        <span class="panel__tag">Roster</span>
+      </div>
+      <p class="panel__lead">名单持续更新中，位置与段位等资料后续补充。</p>
+
+      <!-- 队员由 js/data.js 的 MEMBERS 渲染 -->
+      <ol class="cards cards--roster" id="memberList"></ol>
+    </section>
+
+    <!-- ============ 比赛图集 ============ -->
+    <section class="panel" id="gallery">
+      <div class="panel__head">
+        <h2 class="panel__title">比赛图集</h2>
+        <span class="panel__tag">Gallery</span>
+      </div>
+      <p class="panel__lead">点击图片可放大查看，支持左右方向键切换。</p>
+
+      <!-- 图集由 js/data.js 的 GALLERY 渲染 -->
+      <ul class="gallery" id="galleryList"></ul>
+    </section>
+
+    <!-- ============ 加入我们 ============ -->
+    <section class="panel" id="join">
+      <div class="panel__head">
+        <h2 class="panel__title">加入我们</h2>
+        <span class="panel__tag">Join Us</span>
+      </div>
+      <p class="panel__lead">招新长期开放：先加群，再按下面的标准参加试训考核。</p>
+
+      <div class="join">
+        <div class="join__col">
+          <h3 class="sub">报名流程</h3>
+          <ol class="steps">
+            <li>扫码加入 QQ 群</li>
+            <li>留意群公告里的试训通知</li>
+            <li>参加试训考核</li>
+            <li>试训结束后一周内公布结果</li>
+          </ol>
+        </div>
+
+        <div class="join__col">
+          <h3 class="sub">联系方式</h3>
+
+          <div class="contactcard">
+            <img class="contactcard__qr" src="images/qq-group.png" alt="QQ 群二维码">
+            <div class="contactcard__info">
+              <p class="contactcard__label">QQ 群</p>
+              <!-- ↓↓ 改这里：群号（data-copy 和文字要改两处）↓↓ -->
+              <p class="contactcard__value">541072642</p>
+              <button class="btn btn--accent btn--sm" id="copyQq" data-copy="541072642" type="button">复制群号</button>
+            </div>
+          </div>
+
+          <!-- ↓↓ 改这里：微信号 ↓↓ -->
+          <div class="contactrow">
+            <span class="contactrow__label">微信</span>
+            <span class="contactrow__value">HIT-Delta（添加请备注来意）</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub sub--mt">考核标准</h3>
+      <p class="std-caption">HIT 三角洲行动校队 · 全面战场考核标准规范</p>
+
+      <!-- 总则由 js/data.js 的 RECRUIT.intro 渲染 -->
+      <ul class="std-intro" id="stdIntro"></ul>
+      <!-- 四大类由 js/data.js 的 RECRUIT.groups 渲染 -->
+      <div id="stdGroups"></div>
+
+      <h3 class="sub sub--mt">常见问题</h3>
+      <div class="faq">
+        <!-- ↓↓ 改这里：常见问题 ↓↓ -->
+        <details class="faq__item">
+          <summary>段位不高能进吗？</summary>
+          <p>能。我们更看重沟通和配合，试训时看的是报点是否清晰、是否愿意听指挥，而不是单纯的枪法数据。</p>
+        </details>
+        <details class="faq__item">
+          <summary>训练会占用很多时间吗？</summary>
+          <p>每周三次固定训练，每次大约两小时，时间安排在晚上，会避开考试周。</p>
+        </details>
+        <details class="faq__item">
+          <summary>需要自己准备设备吗？</summary>
+          <p>日常训练使用自己的设备即可，参赛期间的场地和设备由队内统一协调。</p>
+        </details>
+        <details class="faq__item">
+          <summary>加群之后下一步做什么？</summary>
+          <p>加群后留意群公告，我们会安排一场线上试训，试训结束后一周内公布结果。</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ 页脚 ============ -->
+    <footer class="footer">
+      <!-- ↓↓ 改这里：版权与更新时间 ↓↓ -->
+      <p>© 2026 哈尔滨工业大学三角洲行动校队</p>
+      <p class="footer__meta">最后更新：2026-10-06</p>
+    </footer>
+
+  </div><!-- /.wrap -->
+</main>
+
+<!-- 图集灯箱 -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox__close" id="lightboxClose" type="button" aria-label="关闭">✕</button>
+  <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" type="button" aria-label="上一张">‹</button>
+  <figure class="lightbox__figure">
+    <img class="lightbox__img" id="lightboxImg" src="" alt="">
+    <figcaption class="lightbox__caption" id="lightboxCaption"></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" type="button" aria-label="下一张">›</button>
+</div>
+
+<!-- 回到顶部 -->
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>
+
+<!-- 提示条 -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
