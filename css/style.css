@@ -684,6 +684,29 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
 .footer__logo { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: cover; }
 .footer__meta { font-size: 13px; color: var(--text-3); }
 
+/* GitHub 主页入口（做小，不抢眼） */
+.footer__gh {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, .025);
+  color: var(--text-2); font-size: 12px; font-weight: 500;
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.footer__gh:hover {
+  background: rgba(255, 255, 255, .08);
+  border-color: var(--line-2);
+  color: var(--text);
+}
+.footer__ghicon { width: 13px; height: 13px; flex: none; opacity: .8; }
+.footer__ghname { letter-spacing: .02em; }
+.footer__star {
+  padding: 1px 7px; border-radius: var(--radius-pill);
+  background: var(--gold-soft); color: var(--gold);
+  font-size: 10.5px; font-weight: 700; white-space: nowrap;
+}
+.footer__gh:hover .footer__star { background: rgba(240, 181, 99, .22); }
+
 /* ---------- 回到顶部 ---------- */
 .to-top {
   position: fixed; right: 26px; bottom: 26px; z-index: 90;
