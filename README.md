@@ -31,7 +31,7 @@ python -m http.server 8000
 | 首屏小字 / 两行大标题 / 主标语 / 简介 | 首屏 `<section class="hero">` 里 |
 | 队伍简介三段话 | 队伍简介板块 |
 | 报名流程四步 | 加入我们 → 报名流程 |
-| QQ 群号、微信号 | 加入我们 → 联系方式 |
+| QQ 群号 | 加入我们 → 联系方式 |
 | 常见问题 | 加入我们 → 常见问题 |
 | 页脚版权、更新日期 | 文件最下面的 `<footer>` |
 
@@ -39,16 +39,20 @@ python -m http.server 8000
 
 ### 2. 重复内容 → 改 `js/data.js`
 
-队伍数字、战绩、队员、图集这四块由 `js/data.js` 里的数组渲染，改数据不用碰 HTML 结构。
+队伍数字、荣誉焦点、定位卡、战绩、明星队员、队员名单、考核标准这些块由 `js/data.js` 里的数组渲染，改数据不用碰 HTML 结构。
 
 ```js
-var STATS        = [{ value: '2023', label: '成立年份' }, ...];
-var ACHIEVEMENTS = [{ date: '2026-05', title: '赛事名', rank: '名次', desc: '说明' }, ...];
-var MEMBERS      = [{ name: '昵称', gameId: '游戏ID', role: '位置',
-                      rank: '段位', joined: '入队时间', quote: '一句话', avatar: '' }, ...];
-var GALLERY      = [{ src: 'images/gallery/g1.jpg', caption: '图片说明' }, ...];
-var RECRUIT      = { intro: ['总则', ...], groups: [ ... ] };   // 招新考核标准
+var STATS        = [{ value: '2023', label: '成立年份' }, ...];      // 首屏数据条
+var HIGHLIGHT    = { label: '…', text: '…' };                        // 战绩区的荣誉焦点，设为 null 则整块消失
+var PILLARS      = [{ keyword: '固定编制', label: '定位·协作·职责', text: '…' }, ...];  // 队伍简介三张卡
+var QUOTE        = '个人能力能赢下一次交火…';                        // 队伍简介下方的引言
+var ACHIEVEMENTS = [{ date: '2025', title: '赛事名', rank: '名次', desc: '说明' }, ...];
+var STARS        = { title: '…', lead: '…', members: [{ name, gameId, note }, ...] };  // 明星队员
+var MEMBERS      = [{ name, gameId, role, rank, joined, quote, avatar, lead }, ...];
+var RECRUIT      = { intro: [...], groups: [ ... ] };                // 招新考核标准
 ```
+
+**队员里的 `lead: true`**（现在只有指挥官玖酒仙儿）会被单独提出来，渲染成名单最上面那张带徽章的重点卡。
 
 - 战绩按**时间从新到旧**排，日期写 `YYYY-MM` 格式（页面会自动拆成年 / 月显示）。
 - 增删一条就是往数组里加 / 删一个 `{ ... }`，注意每条之间用逗号隔开、最后一条不加逗号。
@@ -105,15 +109,22 @@ var RECRUIT = {
 
 现在的图片全是**占位图**，换成真图**不需要改任何代码**——把同名文件覆盖掉就行：
 
-| 位置 | 当前占位文件 | 换成 | 建议尺寸 |
+| 位置 | 现在是什么 | 换成 | 建议尺寸 |
 |---|---|---|---|
-| 队徽（左上角） | `images/logo.jpg` | 你的队徽 | 正方形，512×512 以上 |
-| 首屏大图 | `images/hero.svg` | 放进 `images/hero.jpg`，再把 `index.html` 里 `src="images/hero.svg"` 改成 `hero.jpg` | 横版 1920×1080 以上 |
-| 队员头像 | `images/members/default.svg` | 放进 `images/members/`，路径填进 `data.js` 的 `avatar` | 正方形 400×400 |
-| 比赛照片 | `images/gallery/g1.svg ~ g6.svg` | 放进 `images/gallery/`，路径填进 `data.js` 的 `GALLERY` | 横版 1200px 宽以上 |
+| 队徽（左上角 / 页脚） | `images/logo.jpg` | 你的队徽，保持同名覆盖 | 正方形，512×512 以上 |
+| 首屏底图 | `images/hero.svg` | **原创战场插画**，想换成真实照片就放进 `images/hero.jpg`，再把 `index.html` 里 `src="images/hero.svg"` 改成 `hero.jpg` | 横版 1920×1080 以上 |
+| 队员 / 明星头像 | `images/operators/op1~6.svg` | **原创干员剪影**，6 款按名字自动分配。想给某人单独换就把图片放进 `images/`，路径填进 `data.js` 那条的 `avatar` | 正方形 400×400 |
 
-> 首屏大图是唯一需要手改一行代码的：把 `index.html` 里的 `images/hero.svg` 改成 `images/hero.jpg`。
-> 不改也能用，只是首屏还是紫色占位底图。
+> 现在所有图都是**程序生成的原创插画**，没有任何版权问题，也不依赖外部图床。
+> 你有自己在游戏里截的图（自己拍的）想用，按上表替换即可。
+
+### 换头像
+
+`data.js` 里的队员默认按**名字哈希**从 6 款干员头像里分配，刷新不变。要单独指定某人：
+
+```js
+{ name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', avatar: 'images/avatars/nsk.jpg' }
+```
 
 ---
 
@@ -169,15 +180,15 @@ delta-force-team-site/
 ├── css/
 │   └── style.css       ← 配色、排版（改颜色看文件顶部的 :root 变量）
 ├── js/
-│   ├── data.js         ← 战绩 / 队员 / 图集 / 考核标准 数据
+│   ├── data.js         ← 数据条/战绩/明星/队员/考核标准 全在这
 │   └── main.js         ← 交互逻辑（一般不用动）
 ├── images/
 │   ├── logo.jpg            ← 队徽
-│   ├── hero.svg            ← 首屏占位底图
+│   ├── hero.svg            ← 首屏底图（原创战场插画）
 │   ├── qq-group.png        ← QQ 群二维码（已裁好）
 │   ├── qq-group-original.png  ← 二维码原图备份，可删
-│   ├── members/
-│   │   └── default.svg     ← 默认头像
+│   ├── operators/
+│   │   └── op1~6.svg       ← 原创干员剪影头像（6 款）
 │   └── gallery/
 │       └── g1.svg ~ g6.svg ← 图集占位
 └── docs/
@@ -201,7 +212,7 @@ delta-force-team-site/
 - 首屏底部数据条（由 `data.js` 的 `STATS` 驱动）
 - 队员卡片「展开资料 / 收起资料」手风琴
 - 招新考核标准：总则 + 四大类（载具 / 步战 / 综合 / 免考）分组卡片，数据来自 `data.js` 的 `RECRUIT`
-- 图集点击灯箱放大，支持 ← → 方向键切换、Esc 关闭
+- 明星队员板块（国家队预选赛五位校友）· 指挥官重点卡
 - 一键复制 QQ 群号（带提示）
 - 滚动淡入动画、回到顶部按钮
 - 跟随系统「减少动态效果」设置
