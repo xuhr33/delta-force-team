@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>哈尔滨工业大学三角洲行动校队</title>
-<meta name="description" content="哈尔滨工业大学三角洲行动校队官方主页：队伍简介、比赛战绩、队员名单、比赛图集与招新信息。">
-<meta name="theme-color" content="#3B0843">
+<meta name="description" content="哈尔滨工业大学三角洲行动校队官方主页：队伍简介、比赛战绩、明星队员、队员名单、招新考核标准。">
+<meta name="theme-color" content="#0C1219">
 <link rel="icon" href="images/logo.jpg">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -34,8 +34,8 @@
       <a href="#top">首页</a>
       <a href="#about">队伍简介</a>
       <a href="#achievements">战绩荣誉</a>
+      <a href="#stars">明星队员</a>
       <a href="#members">队员名单</a>
-      <a href="#gallery">比赛图集</a>
       <a href="#join">加入我们</a>
     </nav>
 
@@ -47,24 +47,20 @@
 
   <!-- ==================== 首屏 ==================== -->
   <section class="hero" id="top">
-    <img class="hero__bg" src="images/hero.svg" alt="哈尔滨工业大学三角洲行动校队合照">
+    <img class="hero__bg" src="images/hero.svg" alt="">
     <div class="hero__shade"></div>
 
     <div class="hero__inner">
-      <!-- ↓↓ 改这里：首屏小字 ↓↓ -->
-      <p class="hero__eyebrow">《三角洲行动》校队 · 哈尔滨工业大学</p>
+      <p class="hero__eyebrow">《三角洲行动》端游 · 手游双端校队</p>
 
-      <!-- ↓↓ 改这里：两行大标题（第二行是强调色）↓↓ -->
       <h1 class="hero__title">
         <span class="hero__title-a">HIT</span>
         <span class="hero__title-b">DELTA TEAM</span>
       </h1>
 
-      <!-- ↓↓ 改这里：主标语 ↓↓ -->
-      <p class="hero__headline">在三角洲的战场上，<br>我们代表哈工大。</p>
+      <p class="hero__headline">为团队而战，<br>为整片战场集结。</p>
 
-      <!-- ↓↓ 改这里：首屏简介 ↓↓ -->
-      <p class="hero__desc">覆盖端游与手游，固定编制、战术部署、分组对抗与赛后复盘。我们把每一名队员的能力，连成一支稳定可靠的作战力量。</p>
+      <p class="hero__desc">固定编制、战术部署、步坦协同与赛后复盘。我们把每一名队员的能力，连成一支稳定可靠的作战力量。</p>
 
       <div class="hero__actions">
         <a class="btn btn--accent" href="#join">申请加入</a>
@@ -72,7 +68,7 @@
       </div>
     </div>
 
-    <!-- 数字由 js/data.js 的 STATS 渲染 -->
+    <!-- 数据由 js/data.js 的 STATS 渲染 -->
     <ul class="hero__stats" id="statsList" aria-label="队伍数据"></ul>
 
     <a class="hero__scroll" href="#about">向下探索 <span aria-hidden="true"></span></a>
@@ -81,113 +77,107 @@
   <div class="wrap">
 
     <!-- ============ 队伍简介 ============ -->
-    <section class="panel" id="about">
-      <div class="panel__head">
-        <h2 class="panel__title">队伍简介</h2>
-        <span class="panel__tag">About</span>
+    <section class="sec" id="about">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow">About</p>
+        <h2 class="sec__title">把一群玩家，<br>变成一支作战力量。</h2>
+        <p class="sec__lead">哈尔滨工业大学三角洲行动校队成立于 2023 年，由在校学生自发组织，以《三角洲行动》全面战场模式为主要训练项目。</p>
+      </header>
+
+      <div class="about">
+        <div class="about__text reveal">
+          <p>队伍现役队员三十余人，按指挥、突击、侦察、支援四个位置分组，每周固定训练三次，内容包括地图战术推演、分组对抗和录像复盘。</p>
+          <p>我们不追求个人枪法的高光时刻，更看重一次成功的报点、一次及时的补枪、一次默契的换位。稳定的沟通和执行力，是判断一名队员是否合格的第一标准。</p>
+        </div>
+
+        <!-- 三张定位卡由 js/data.js 的 PILLARS 渲染 -->
+        <ul class="pillars reveal" id="pillarList"></ul>
       </div>
 
-      <div class="about__text">
-        <!-- ↓↓ 改这里：队伍简介，150-250 字 ↓↓ -->
-        <p>哈尔滨工业大学三角洲行动校队成立于 2023 年，是由在校学生自发组织的电子竞技队伍。队伍以《三角洲行动》为主要训练项目，现役队员二十余人，按指挥、突击、侦察、支援四个位置分组训练。</p>
-        <p>队伍每周固定训练三次，内容包括地图战术推演、分组对抗和录像复盘。我们不追求个人枪法的高光时刻，更看重一次成功的报点、一次及时的补枪、一次默契的换位。稳定的沟通和执行力，是我们判断一名队员是否合格的第一标准。</p>
-        <p>如果你也想在赛场上和一群靠谱的人并肩作战，欢迎看看下面的招新信息。</p>
-      </div>
+      <!-- 引言由 js/data.js 的 QUOTE 渲染 -->
+      <blockquote class="pullquote reveal" id="pullQuote"></blockquote>
     </section>
 
     <!-- ============ 战绩荣誉 ============ -->
-    <section class="panel" id="achievements">
-      <div class="panel__head">
-        <h2 class="panel__title">战绩荣誉</h2>
-        <span class="panel__tag">Honours</span>
-      </div>
-      <p class="panel__lead">从校内赛到全国赛，我们一步步打上来。</p>
+    <section class="sec" id="achievements">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow">Honours</p>
+        <h2 class="sec__title">从校内赛打到全国赛。</h2>
+      </header>
 
       <!-- 荣誉焦点由 js/data.js 的 HIGHLIGHT 渲染（设为 null 则整块消失） -->
-      <div class="honor" id="honorHighlight"></div>
+      <div class="honor reveal" id="honorHighlight"></div>
 
       <!-- 战绩由 js/data.js 的 ACHIEVEMENTS 渲染 -->
       <ol class="cards" id="achievementList"></ol>
     </section>
 
-    <!-- ============ 队员名单 ============ -->
-    <section class="panel" id="members">
-      <div class="panel__head">
-        <h2 class="panel__title">队员名单</h2>
-        <span class="panel__tag">Roster</span>
-      </div>
-      <p class="panel__lead">名单持续更新中，位置与段位等资料后续补充。</p>
+    <!-- ============ 明星队员 ============ -->
+    <section class="sec" id="stars">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow" id="starsEyebrow">National Team Trial</p>
+        <h2 class="sec__title" id="starsTitle">国家队预选赛，有我们的人。</h2>
+        <p class="sec__lead" id="starsLead"></p>
+      </header>
 
-      <!-- 队员由 js/data.js 的 MEMBERS 渲染 -->
-      <ol class="cards cards--roster" id="memberList"></ol>
+      <!-- 由 js/data.js 的 STARS 渲染 -->
+      <ul class="stars" id="starList"></ul>
     </section>
 
-    <!-- ============ 比赛图集 ============ -->
-    <section class="panel" id="gallery">
-      <div class="panel__head">
-        <h2 class="panel__title">比赛图集</h2>
-        <span class="panel__tag">Gallery</span>
-      </div>
-      <p class="panel__lead">点击图片可放大查看，支持左右方向键切换。</p>
+    <!-- ============ 队员名单 ============ -->
+    <section class="sec" id="members">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow">Roster</p>
+        <h2 class="sec__title">登记在册，并肩作战。</h2>
+        <p class="sec__lead">名单持续更新中，位置与段位等资料后续补充。</p>
+      </header>
 
-      <!-- 图集由 js/data.js 的 GALLERY 渲染 -->
-      <ul class="gallery" id="galleryList"></ul>
+      <!-- 队员由 js/data.js 的 MEMBERS 渲染（lead:true 的会被提出来做重点卡） -->
+      <ul class="cards cards--roster" id="memberList"></ul>
     </section>
 
     <!-- ============ 加入我们 ============ -->
-    <section class="panel" id="join">
-      <div class="panel__head">
-        <h2 class="panel__title">加入我们</h2>
-        <span class="panel__tag">Join Us</span>
-      </div>
-      <p class="panel__lead">招新长期开放：先加群，再按下面的标准参加试训考核。</p>
+    <section class="sec" id="join">
+      <header class="sec__head reveal">
+        <p class="sec__eyebrow">Join Us</p>
+        <h2 class="sec__title">下一场行动，等你加入。</h2>
+      </header>
 
       <div class="join">
-        <div class="join__col">
+        <div class="join__col reveal">
           <h3 class="sub">报名流程</h3>
           <ol class="steps">
             <li>扫码加入 QQ 群</li>
             <li>留意群公告里的试训通知</li>
-            <li>参加试训考核</li>
+            <li>按下面标准参加试训考核</li>
             <li>试训结束后一周内公布结果</li>
           </ol>
         </div>
 
-        <div class="join__col">
+        <div class="join__col reveal">
           <h3 class="sub">联系方式</h3>
-
           <div class="contactcard">
             <img class="contactcard__qr" src="images/qq-group.png" alt="QQ 群二维码">
             <div class="contactcard__info">
               <p class="contactcard__label">QQ 群</p>
-              <!-- ↓↓ 改这里：群号（data-copy 和文字要改两处）↓↓ -->
               <p class="contactcard__value">541072642</p>
               <button class="btn btn--accent btn--sm" id="copyQq" data-copy="541072642" type="button">复制群号</button>
             </div>
           </div>
-
-          <!-- ↓↓ 改这里：微信号 ↓↓ -->
-          <div class="contactrow">
-            <span class="contactrow__label">微信</span>
-            <span class="contactrow__value">HIT-Delta（添加请备注来意）</span>
-          </div>
         </div>
       </div>
 
-      <h3 class="sub sub--mt">考核标准</h3>
-      <p class="std-caption">HIT 三角洲行动校队 · 全面战场考核标准规范</p>
+      <h3 class="sub sub--mt reveal">考核标准</h3>
+      <p class="std-caption reveal">HIT 三角洲行动校队 · 全面战场考核标准规范</p>
 
-      <!-- 总则由 js/data.js 的 RECRUIT.intro 渲染 -->
-      <ul class="std-intro" id="stdIntro"></ul>
-      <!-- 四大类由 js/data.js 的 RECRUIT.groups 渲染 -->
+      <ul class="std-intro reveal" id="stdIntro"></ul>
       <div id="stdGroups"></div>
 
-      <h3 class="sub sub--mt">常见问题</h3>
+      <h3 class="sub sub--mt reveal">常见问题</h3>
       <div class="faq">
-        <!-- ↓↓ 改这里：常见问题 ↓↓ -->
         <details class="faq__item">
-          <summary>段位不高能进吗？</summary>
-          <p>能。我们更看重沟通和配合，试训时看的是报点是否清晰、是否愿意听指挥，而不是单纯的枪法数据。</p>
+          <summary>没打过排位能来吗？</summary>
+          <p>可以来试训，但考核是按上表的硬指标来的。先来打一场，我们会告诉你差在哪、怎么补。</p>
         </details>
         <details class="faq__item">
           <summary>训练会占用很多时间吗？</summary>
@@ -206,24 +196,15 @@
 
     <!-- ============ 页脚 ============ -->
     <footer class="footer">
-      <!-- ↓↓ 改这里：版权与更新时间 ↓↓ -->
-      <p>© 2026 哈尔滨工业大学三角洲行动校队</p>
-      <p class="footer__meta">最后更新：2026-10-06</p>
+      <div class="footer__brand">
+        <img src="images/logo.jpg" alt="" class="footer__logo">
+        <span>HIT 三角洲校队</span>
+      </div>
+      <p class="footer__meta">© 2026 哈尔滨工业大学三角洲行动校队 · 最后更新 2026-10-06</p>
     </footer>
 
   </div><!-- /.wrap -->
 </main>
-
-<!-- 图集灯箱 -->
-<div class="lightbox" id="lightbox" hidden>
-  <button class="lightbox__close" id="lightboxClose" type="button" aria-label="关闭">✕</button>
-  <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" type="button" aria-label="上一张">‹</button>
-  <figure class="lightbox__figure">
-    <img class="lightbox__img" id="lightboxImg" src="" alt="">
-    <figcaption class="lightbox__caption" id="lightboxCaption"></figcaption>
-  </figure>
-  <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" type="button" aria-label="下一张">›</button>
-</div>
 
 <!-- 回到顶部 -->
 <button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>

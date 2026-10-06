@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <defs>
+    <clipPath id="round"><circle cx="120" cy="120" r="120"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#251417"/>
+      <stop offset="1" stop-color="#15090B"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#663940"/>
+      <stop offset="1" stop-color="#15090B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="34%" r="56%">
+      <stop offset="0" stop-color="#FF8A8A" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#FF8A8A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="240" height="240" fill="url(#bg)"/>
+    <rect width="240" height="240" fill="url(#glow)"/>
+
+    <!-- 定位网格 -->
+    <g stroke="#FF8A8A" stroke-opacity="0.07" stroke-width="1">
+      <path d="M0 60 H240 M0 120 H240 M0 180 H240 M60 0 V240 M120 0 V240 M180 0 V240"/>
+    </g>
+
+    <!-- 肩背 -->
+    <path d="M22 240 Q30 176 92 162 H148 Q210 176 218 240 Z" fill="url(#body)"/>
+    <!-- 背带 -->
+    <path d="M74 168 L86 240 H70 Z" fill="#15090B" opacity="0.55"/>
+    <path d="M166 168 L154 240 H170 Z" fill="#15090B" opacity="0.55"/>
+    <!-- 肩部反光 -->
+    <path d="M30 214 Q66 176 100 166" fill="none" stroke="#FF8A8A" stroke-opacity="0.3" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- 脖子 -->
+    <rect x="98" y="140" width="44" height="30" rx="12" fill="#15090B"/>
+
+    <!-- 头盔外壳 -->
+    <path d="M120 34 C82 34 62 62 62 100 L62 116 H178 L178 100 C178 62 158 34 120 34 Z" fill="url(#body)"/>
+    <!-- 头盔受光边 -->
+    <path d="M74 96 C74 62 92 42 120 42" fill="none" stroke="#FF8A8A" stroke-opacity="0.42" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- 面罩 -->
+    <path d="M74 108 H166 V126 C166 142 148 154 120 154 C92 154 74 142 74 126 Z" fill="#15090B"/>
+    <!-- 护目镜 / 面罩反光条 -->
+    <rect x="76" y="110" width="88" height="14" rx="7" fill="#FF8A8A" opacity="0.62"/>
+    <rect x="80" y="113" width="34" height="4" rx="2" fill="#FFFFFF" opacity="0.5"/>
+    <!-- 呼吸阀 -->
+    <circle cx="120" cy="138" r="7" fill="#663940" opacity="0.75"/>
+
+    <path d="M60 76 H140 L136 64 H64 Z" fill="#663940"/>
+              <rect x="60" y="76" width="80" height="6" rx="3" fill="#FF8A8A" opacity="0.35"/>
+  </g>
+
+  <!-- 外圈 -->
+  <circle cx="120" cy="120" r="117" fill="none" stroke="#FF8A8A" stroke-opacity="0.28" stroke-width="3"/>
+</svg>

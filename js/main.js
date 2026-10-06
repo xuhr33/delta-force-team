@@ -1,6 +1,7 @@
 /* ==========================================================================
    main.js — 渲染重复内容 + 全部交互
-   依赖 data.js 里的 STATS / ACHIEVEMENTS / MEMBERS / GALLERY
+   依赖 data.js 里的 STATS / HIGHLIGHT / PILLARS / QUOTE
+                    ACHIEVEMENTS / STARS / MEMBERS / RECRUIT
    ========================================================================== */
 (function () {
   'use strict';
@@ -38,8 +39,19 @@
   function $(sel) { return document.querySelector(sel); }
   function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
+  /* 按名字稳定地分配一个干员头像（6 款轮着用），保证刷新后不变 */
+  function operatorFor(name) {
+    var s = String(name || ''), sum = 0;
+    for (var i = 0; i < s.length; i++) sum += s.charCodeAt(i) * (i + 7);
+    return 'images/operators/op' + (sum % 6 + 1) + '.svg';
+  }
+
+  function avatarSrc(m) {
+    return m.avatar || operatorFor(m.name || m.gameId);
+  }
+
   /* ---------------------------------------------------------------------
-     1. 渲染数据驱动的内容
+     1. 首屏数据条
      --------------------------------------------------------------------- */
   function renderStats() {
     var list = $('#statsList');
@@ -53,6 +65,28 @@
     }));
   }
 
+  /* ---------------------------------------------------------------------
+     2. 队伍简介：三张定位卡 + 引言
+     --------------------------------------------------------------------- */
+  function renderPillars() {
+    var list = $('#pillarList');
+    if (list && typeof PILLARS !== 'undefined') {
+      list.replaceChildren.apply(list, PILLARS.map(function (p) {
+        return h('li', { class: 'pillar' },
+          h('p', { class: 'pillar__keyword', text: p.keyword }),
+          h('p', { class: 'pillar__label', text: p.label }),
+          h('p', { class: 'pillar__text', text: p.text })
+        );
+      }));
+    }
+
+    var q = $('#pullQuote');
+    if (q && typeof QUOTE !== 'undefined' && QUOTE) q.textContent = QUOTE;
+  }
+
+  /* ---------------------------------------------------------------------
+     3. 战绩荣誉
+     --------------------------------------------------------------------- */
   function renderHighlight() {
     var host = $('#honorHighlight');
     if (!host) return;
@@ -98,21 +132,37 @@
     }));
   }
 
-  /* 有头像图就用图，没有就用名字第一个字做色块头像 */
-  function memberAvatar(m) {
-    if (m.avatar) {
-      return h('img', {
-        class: 'member__avatar',
-        src: m.avatar,
-        alt: (m.name || m.gameId) + ' 的头像',
-        loading: 'lazy',
-        onerror: 'this.onerror=null;this.src="images/members/default.svg"'
-      });
-    }
-    var ch = String(m.name || m.gameId || '?').trim().charAt(0);
-    return h('span', { class: 'member__avatar member__avatar--mark', 'aria-hidden': 'true', text: ch });
+  /* ---------------------------------------------------------------------
+     4. 明星队员
+     --------------------------------------------------------------------- */
+  function renderStars() {
+    var list = $('#starList');
+    if (!list || typeof STARS === 'undefined' || !STARS) return;
+
+    if ($('#starsEyebrow')) $('#starsEyebrow').textContent = STARS.eyebrow || '';
+    if ($('#starsTitle')) $('#starsTitle').textContent = STARS.title || '';
+    if ($('#starsLead')) $('#starsLead').textContent = STARS.lead || '';
+
+    list.replaceChildren.apply(list, (STARS.members || []).map(function (m) {
+      return h('li', { class: 'star reveal' },
+        h('img', {
+          class: 'star__avatar',
+          src: avatarSrc(m),
+          alt: m.name + ' 的头像',
+          loading: 'lazy'
+        }),
+        h('div', { class: 'star__body' },
+          h('p', { class: 'star__name', text: m.name }),
+          m.gameId ? h('p', { class: 'star__gid', text: m.gameId }) : null,
+          m.note ? h('p', { class: 'star__note', text: m.note }) : null
+        )
+      );
+    }));
   }
 
+  /* ---------------------------------------------------------------------
+     5. 队员名单（lead:true 的提出来做重点卡）
+     --------------------------------------------------------------------- */
   function renderMembers() {
     var list = $('#memberList');
     if (!list || typeof MEMBERS === 'undefined') return;
@@ -123,7 +173,23 @@
       { key: 'joined', label: '入队时间' }
     ];
 
-    list.replaceChildren.apply(list, MEMBERS.map(function (m, i) {
+    var nodes = [];
+
+    /* 重点队员（指挥官等） */
+    MEMBERS.filter(function (m) { return m.lead; }).forEach(function (m) {
+      nodes.push(h('li', { class: 'leadcard reveal' },
+        h('img', { class: 'leadcard__avatar', src: avatarSrc(m), alt: m.name + ' 的头像' }),
+        h('div', { class: 'leadcard__body' },
+          h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
+          h('p', { class: 'leadcard__name', text: m.name }),
+          m.gameId ? h('p', { class: 'leadcard__gid', text: m.gameId }) : null,
+          m.quote ? h('p', { class: 'leadcard__quote', text: '「' + m.quote + '」' }) : null
+        )
+      ));
+    });
+
+    /* 其余队员 */
+    MEMBERS.filter(function (m) { return !m.lead; }).forEach(function (m, i) {
       var detailId = 'memberDetail' + i;
       var rows = [];
 
@@ -147,7 +213,7 @@
       var displayName = m.name || m.gameId;
 
       var rowKids = [
-        memberAvatar(m),
+        h('img', { class: 'member__avatar', src: avatarSrc(m), alt: displayName + ' 的头像', loading: 'lazy' }),
         h('div', { class: 'member__id' },
           h('h3', { class: 'member__name', text: displayName }),
           (m.gameId && m.gameId !== displayName)
@@ -170,13 +236,14 @@
       }
 
       var kids = [h('div', { class: 'member__row' }, rowKids)];
-
       if (hasDetail) {
         kids.push(h('div', { class: 'member__detail', id: detailId, hidden: 'hidden' }, rows));
       }
 
-      return h('li', { class: 'card card--member reveal' }, kids);
-    }));
+      nodes.push(h('li', { class: 'card card--member reveal' }, kids));
+    });
+
+    list.replaceChildren.apply(list, nodes);
 
     /* 「展开资料」手风琴（事件委托，一次绑定） */
     list.addEventListener('click', function (e) {
@@ -195,6 +262,9 @@
     });
   }
 
+  /* ---------------------------------------------------------------------
+     6. 招新考核标准
+     --------------------------------------------------------------------- */
   function renderRecruit() {
     if (typeof RECRUIT === 'undefined') return;
 
@@ -231,27 +301,8 @@
     }
   }
 
-  function renderGallery() {
-    var list = $('#galleryList');
-    if (!list || typeof GALLERY === 'undefined') return;
-
-    list.replaceChildren.apply(list, GALLERY.map(function (g, i) {
-      return h('li', { class: 'gallery__cell' },
-        h('button', {
-          class: 'gallery__item reveal',
-          type: 'button',
-          'data-index': String(i),
-          'aria-label': '查看大图：' + (g.caption || '图片 ' + (i + 1))
-        },
-          h('img', { src: g.src, alt: g.caption || '', loading: 'lazy' }),
-          g.caption ? h('span', { class: 'gallery__cap', text: g.caption }) : null
-        )
-      );
-    }));
-  }
-
   /* ---------------------------------------------------------------------
-     2. 滚动淡入
+     7. 滚动淡入
      --------------------------------------------------------------------- */
   function initReveal() {
     var items = $$('.reveal');
@@ -273,7 +324,7 @@
   }
 
   /* ---------------------------------------------------------------------
-     3. 顶部导航：窄屏折叠菜单
+     8. 顶部导航：窄屏折叠菜单
      --------------------------------------------------------------------- */
   function initDrawer() {
     var btn = $('#menuBtn');
@@ -305,7 +356,7 @@
   }
 
   /* ---------------------------------------------------------------------
-     4. 滚动高亮：顶部导航当前板块
+     9. 滚动高亮：顶部导航当前板块
      --------------------------------------------------------------------- */
   function initSpy() {
     var links = $$('.topnav__menu a');
@@ -324,7 +375,6 @@
       });
     }
 
-    /* 还在首屏里就高亮「首页」 */
     function clearIfInHero() {
       if (!hero) return false;
       var limit = hero.offsetTop + hero.offsetHeight - 120;
@@ -355,66 +405,7 @@
   }
 
   /* ---------------------------------------------------------------------
-     5. 图集灯箱
-     --------------------------------------------------------------------- */
-  function initLightbox() {
-    var box = $('#lightbox');
-    if (!box || typeof GALLERY === 'undefined') return;
-
-    var imgEl = $('#lightboxImg');
-    var capEl = $('#lightboxCaption');
-    var list = $('#galleryList');
-    var current = 0;
-    var lastFocused = null;
-
-    function show(index) {
-      if (!GALLERY.length) return;
-      current = (index + GALLERY.length) % GALLERY.length;
-      var item = GALLERY[current];
-      imgEl.src = item.src;
-      imgEl.alt = item.caption || '';
-      capEl.textContent = item.caption || '';
-    }
-
-    function open(index) {
-      lastFocused = document.activeElement;
-      show(index);
-      box.hidden = false;
-      document.body.style.overflow = 'hidden';
-      $('#lightboxClose').focus();
-    }
-
-    function close() {
-      box.hidden = true;
-      document.body.style.overflow = '';
-      if (lastFocused && lastFocused.focus) lastFocused.focus();
-    }
-
-    if (list) {
-      list.addEventListener('click', function (e) {
-        var btn = e.target.closest('.gallery__item');
-        if (btn) open(Number(btn.getAttribute('data-index')) || 0);
-      });
-    }
-
-    $('#lightboxClose').addEventListener('click', close);
-    $('#lightboxPrev').addEventListener('click', function () { show(current - 1); });
-    $('#lightboxNext').addEventListener('click', function () { show(current + 1); });
-
-    box.addEventListener('click', function (e) {
-      if (e.target === box) close();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (box.hidden) return;
-      if (e.key === 'Escape') close();
-      else if (e.key === 'ArrowLeft') show(current - 1);
-      else if (e.key === 'ArrowRight') show(current + 1);
-    });
-  }
-
-  /* ---------------------------------------------------------------------
-     6. 回到顶部
+     10. 回到顶部
      --------------------------------------------------------------------- */
   var toTopBtn;
 
@@ -435,7 +426,7 @@
   }
 
   /* ---------------------------------------------------------------------
-     7. 提示条 + 复制群号
+     11. 提示条 + 复制群号
      --------------------------------------------------------------------- */
   var toastEl;
   var toastTimer;
@@ -490,16 +481,16 @@
      启动
      --------------------------------------------------------------------- */
   renderStats();
+  renderPillars();
   renderHighlight();
   renderAchievements();
+  renderStars();
   renderMembers();
   renderRecruit();
-  renderGallery();
 
   initReveal();
   initDrawer();
   initSpy();
-  initLightbox();
   initToTop();
   initCopy();
 

@@ -21,6 +21,22 @@ var HIGHLIGHT = {
   text: '校队校友 奈瑟卡特、bbbing、MAVZ、茉铭、江河之情 出战，为校队发力。'
 };
 
+/* ---------- 明星队员 ----------
+   展示进过国家队预选赛的校友。note 会显示在名字下面。
+*/
+var STARS = {
+  eyebrow: 'National Team Trial',
+  title: '国家队预选赛，有我们的人。',
+  lead: '2026 国际邀请赛国家队预选赛，五位校队校友代表出战。',
+  members: [
+    { name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', note: '国家队预选赛队员' },
+    { name: 'bbbing',  gameId: 'HIT、bbbing',  note: '国家队预选赛队员' },
+    { name: 'MAVZ',    gameId: 'HIT、MAVZ',    note: '国家队预选赛队员' },
+    { name: '茉铭',    gameId: '',             note: '国家队预选赛队员 · 校友' },
+    { name: '江河之情', gameId: 'HIT、江河之情', note: '国家队预选赛队员' }
+  ]
+};
+
 /* ---------- 战绩荣誉（按时间从新到旧排） ----------
    date 可以不写：不写就不显示左侧的日期方块，卡片自动变两栏
 */
@@ -66,7 +82,7 @@ var MEMBERS = [
   { name: '雨暮花落',        gameId: 'HIT、雨暮花落' },
   { name: '鸣濑白羽',        gameId: 'HIT、鸣濑白羽' },
   { name: '薯条大王',        gameId: 'HIT、薯条大王' },
-  { name: '玖酒仙儿',        gameId: 'HIT、玖酒仙儿' },
+  { name: '玖酒仙儿',        gameId: 'HIT、玖酒仙儿', role: '指挥官', lead: true },
   { name: '白宇BaiYu',      gameId: 'HIT、白宇BaiYu' },
   { name: '小飞鼠II',        gameId: 'HIT、小飞鼠II' },
   { name: '巅峰之作',        gameId: 'HIT、巅峰之作' },
@@ -80,15 +96,26 @@ var MEMBERS = [
   { name: '第n个人',         gameId: 'HIT、第n个人' }
 ];
 
-/* ---------- 图集 ---------- */
-var GALLERY = [
-  { src: 'images/gallery/g1.svg', caption: '2026 全国邀请赛决赛现场' },
-  { src: 'images/gallery/g2.svg', caption: '赛后合影' },
-  { src: 'images/gallery/g3.svg', caption: '赛前战术讨论' },
-  { src: 'images/gallery/g4.svg', caption: '东北赛区夺冠' },
-  { src: 'images/gallery/g5.svg', caption: '校内训练日常' },
-  { src: 'images/gallery/g6.svg', caption: '招新试训现场' }
+/* ---------- 队伍简介旁边的三张定位卡 ---------- */
+var PILLARS = [
+  {
+    keyword: '固定编制',
+    label: '定位 · 协作 · 职责',
+    text: '每个位置有人负责，谁打头阵、谁断后、谁补位，赛前就说清楚。'
+  },
+  {
+    keyword: '战术协同',
+    label: '规划 · 响应 · 执行',
+    text: '步坦协同、多坦协同、穿插进攻，练的是整队的节奏而不是个人的枪法。'
+  },
+  {
+    keyword: '长期成长',
+    label: '投入 · 沟通 · 复盘',
+    text: '每次训练赛后看录像复盘，把上一局的失误变成下一局的本能。'
+  }
 ];
+
+var QUOTE = '个人能力能赢下一次交火，稳定的团队才能控制整个战局。';
 
 /* ---------- 招新考核标准 ----------
    来源：《HIT三角洲行动校队全面战场考核标准规范》
