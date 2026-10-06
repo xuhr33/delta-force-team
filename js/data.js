@@ -32,7 +32,7 @@ var STARS = {
     { name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', note: '国家队预选赛队员' },
     { name: 'bbbing',  gameId: 'HIT、bbbing',  note: '国家队预选赛队员' },
     { name: 'MAVZ',    gameId: 'HIT、MAVZ',    note: '国家队预选赛队员' },
-    { name: '茉铭',    gameId: '',             note: '国家队预选赛队员' },
+    { name: '茉铭',    gameId: 'HIT、茉铭',    note: '国家队预选赛队员' },
     { name: '江河之情', gameId: 'HIT、江河之情', note: '国家队预选赛队员' }
   ]
 };
@@ -94,7 +94,7 @@ var MEMBERS = [
   { name: '玉面手雷王',      gameId: 'HIT玉面手雷王' },
   { name: 'bbbing',         gameId: 'HIT、bbbing' },
   { name: '第n个人',         gameId: 'HIT、第n个人' },
-  { name: '茉铭' }
+  { name: '茉铭',            gameId: 'HIT、茉铭' }
 ];
 
 /* ---------- 鸣谢 ----------
