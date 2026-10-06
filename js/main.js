@@ -39,15 +39,31 @@
   function $(sel) { return document.querySelector(sel); }
   function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
-  /* 按名字稳定地分配一个干员头像（6 款轮着用），保证刷新后不变 */
-  function operatorFor(name) {
-    var s = String(name || ''), sum = 0;
-    for (var i = 0; i < s.length; i++) sum += s.charCodeAt(i) * (i + 7);
-    return 'images/operators/op' + (sum % 6 + 1) + '.svg';
+  /* ---------- 干员头像 ----------
+     12 张素材放在 images/avatars/av01.jpg ~ av12.jpg
+     按名字哈希稳定分配（刷新不变、加人也不会集体换脸）；
+     相邻两个人撞到同一张时自动顺延一张，避免并排出现同一张脸。
+     想给某人指定头像：在 data.js 那条里写 avatar: 'images/avatars/av07.jpg'
+  */
+  var AVATAR_COUNT = 12;
+
+  function hashOf(s) {
+    var t = String(s || ''), sum = 0;
+    for (var i = 0; i < t.length; i++) sum += t.charCodeAt(i) * (i + 7);
+    return sum;
   }
 
-  function avatarSrc(m) {
-    return m.avatar || operatorFor(m.name || m.gameId);
+  function avatarFile(n) {
+    var k = n + 1;
+    return 'images/avatars/av' + (k < 10 ? '0' : '') + k + '.jpg';
+  }
+
+  function avatarFor(m, prevFile) {
+    if (m.avatar) return m.avatar;
+    var n = hashOf(m.name || m.gameId) % AVATAR_COUNT;
+    var file = avatarFile(n);
+    if (file === prevFile) file = avatarFile((n + 1) % AVATAR_COUNT);
+    return file;
   }
 
   /* ---------------------------------------------------------------------
@@ -143,11 +159,15 @@
     if ($('#starsTitle')) $('#starsTitle').textContent = STARS.title || '';
     if ($('#starsLead')) $('#starsLead').textContent = STARS.lead || '';
 
+    var prevStar = null;
+
     list.replaceChildren.apply(list, (STARS.members || []).map(function (m) {
+      var src = avatarFor(m, prevStar);
+      prevStar = src;
       return h('li', { class: 'star reveal' },
         h('img', {
           class: 'star__avatar',
-          src: avatarSrc(m),
+          src: src,
           alt: m.name + ' 的头像',
           loading: 'lazy'
         }),
@@ -174,11 +194,14 @@
     ];
 
     var nodes = [];
+    var prevAvatar = null;
 
     /* 重点队员（指挥官等） */
     MEMBERS.filter(function (m) { return m.lead; }).forEach(function (m) {
+      var src = avatarFor(m, prevAvatar);
+      prevAvatar = src;
       nodes.push(h('li', { class: 'leadcard reveal' },
-        h('img', { class: 'leadcard__avatar', src: avatarSrc(m), alt: m.name + ' 的头像' }),
+        h('img', { class: 'leadcard__avatar', src: src, alt: m.name + ' 的头像' }),
         h('div', { class: 'leadcard__body' },
           h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
           h('p', { class: 'leadcard__name', text: m.name }),
@@ -212,8 +235,11 @@
       var hasDetail = rows.length > 0;
       var displayName = m.name || m.gameId;
 
+      var mSrc = avatarFor(m, prevAvatar);
+      prevAvatar = mSrc;
+
       var rowKids = [
-        h('img', { class: 'member__avatar', src: avatarSrc(m), alt: displayName + ' 的头像', loading: 'lazy' }),
+        h('img', { class: 'member__avatar', src: mSrc, alt: displayName + ' 的头像', loading: 'lazy' }),
         h('div', { class: 'member__id' },
           h('h3', { class: 'member__name', text: displayName }),
           (m.gameId && m.gameId !== displayName)

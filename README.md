@@ -113,17 +113,17 @@ var RECRUIT = {
 |---|---|---|---|
 | 队徽（左上角 / 页脚） | `images/logo.jpg` | 你的队徽，保持同名覆盖 | 正方形，512×512 以上 |
 | 首屏底图 | `images/hero.svg` | **原创战场插画**，想换成真实照片就放进 `images/hero.jpg`，再把 `index.html` 里 `src="images/hero.svg"` 改成 `hero.jpg` | 横版 1920×1080 以上 |
-| 队员 / 明星头像 | `images/operators/op1~6.svg` | **原创干员剪影**，6 款按名字自动分配。想给某人单独换就把图片放进 `images/`，路径填进 `data.js` 那条的 `avatar` | 正方形 400×400 |
+| 队员 / 明星头像 | `images/avatars/av01~12.jpg` | **三角洲干员立绘 12 张**，按名字自动分配。想给某人单独换就把图片放进 `images/avatars/`，路径填进 `data.js` 那条的 `avatar` | 正方形 400×400 以上 |
 
 > 现在所有图都是**程序生成的原创插画**，没有任何版权问题，也不依赖外部图床。
 > 你有自己在游戏里截的图（自己拍的）想用，按上表替换即可。
 
 ### 换头像
 
-`data.js` 里的队员默认按**名字哈希**从 6 款干员头像里分配，刷新不变。要单独指定某人：
+`data.js` 里的队员默认按**名字哈希**从 12 张干员头像里分配，刷新不变；相邻两个人撞到同一张会自动顺延一张，不会并排出现同一张脸。要单独指定某人：
 
 ```js
-{ name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', avatar: 'images/avatars/nsk.jpg' }
+{ name: '奈瑟卡特', gameId: 'HIT、奈瑟卡特', avatar: 'images/avatars/av03.jpg' }
 ```
 
 ---
@@ -187,8 +187,8 @@ delta-force-team-site/
 │   ├── hero.svg            ← 首屏底图（原创战场插画）
 │   ├── qq-group.png        ← QQ 群二维码（已裁好）
 │   ├── qq-group-original.png  ← 二维码原图备份，可删
-│   ├── operators/
-│   │   └── op1~6.svg       ← 原创干员剪影头像（6 款）
+│   ├── avatars/
+│   │   └── av01~12.jpg     ← 干员头像（12 张）
 │   └── gallery/
 │       └── g1.svg ~ g6.svg ← 图集占位
 └── docs/
