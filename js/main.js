@@ -45,12 +45,16 @@
      相邻两个人撞到同一张时自动顺延一张，避免并排出现同一张脸。
      想给某人指定头像：在 data.js 那条里写 avatar: 'images/avatars/av07.jpg'
   */
-  var AVATAR_COUNT = 12;
+  var AVATAR_COUNT = 15;
 
+  /* FNV-1a 变体：分布比简单求和均匀，换池子时也能把所有人重新洗一遍 */
   function hashOf(s) {
-    var t = String(s || ''), sum = 0;
-    for (var i = 0; i < t.length; i++) sum += t.charCodeAt(i) * (i + 7);
-    return sum;
+    var t = String(s || ''), h = 2166136261;
+    for (var i = 0; i < t.length; i++) {
+      h ^= t.charCodeAt(i);
+      h = (h * 16777619) >>> 0;
+    }
+    return h;
   }
 
   function avatarFile(n, big) {
