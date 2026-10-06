@@ -1,6 +1,8 @@
 # 哈工大三角洲校队主页
 
-暗色电竞风单页官网：横向顶部导航 + 全屏首屏 + 深紫卡片 + 绿色强调。
+![站点自检](https://github.com/xuhr33/delta-force-team/actions/workflows/check.yml/badge.svg)
+
+暗色军事风单页官网：横向顶部导航 + 全屏首屏 + 深紫卡片 + 绿色强调。
 
 **纯静态，零依赖，零构建**：没有 Node、没有框架、没有外部 CDN（字体走系统字体栈）。断网双击 `index.html` 就能完整打开。
 
@@ -171,7 +173,46 @@ git push
 
 ---
 
-## 五、文件结构
+## 五、多人一起改
+
+### 队友怎么改内容（不用装任何软件）
+
+1. 打开 https://github.com/xuhr33/delta-force-team/blob/main/js/data.js
+2. 点右上角的**铅笔图标**
+3. 改内容（队员、战绩、考核标准都在这个文件里）
+4. 拉到底，点 **Commit changes**
+5. **等 1 分钟**，线上自动更新
+
+### 自动检查（防止改崩）
+
+每次有人提交，GitHub 会自动跑 `.github/check-site.js`，检查：
+
+- JS 有没有语法错误（多半是少写 / 多写了一个逗号）
+- 引用的图片、样式、脚本文件在不在
+- 导航锚点能不能跳到对应板块
+- 队员、战绩数组有没有被清空
+- 队员自定义的头像文件在不在
+
+**本地也能跑**：
+
+```bash
+node .github/check-site.js
+```
+
+检查不通过会显示红叉并在 GitHub 上报错，具体哪一行坏了会写清楚。
+
+### 权限怎么给（三种，按需选）
+
+| 做法 | 队友能做什么 | 风险 |
+|---|---|---|
+| 公开仓库，谁都能提 Pull Request | 改完提 PR，**你审过才上线** | 无 |
+| 加成协作者（Write） | 网页上直接改、直接上线 | 改错就挂站，靠自检拦 |
+| 协作者 + 保护 main 分支 | 能改，但必须走 PR 由你合并 | 无 |
+
+- **加协作者**：仓库 Settings → Collaborators → Add people → 选 **Write**
+- **保护 main**：Settings → Rules → New ruleset，勾上 Require a pull request before merging
+- 公开仓库的协作者数量无上限，全部免费
+## 六、文件结构
 
 ```
 delta-force-team-site/
@@ -188,9 +229,8 @@ delta-force-team-site/
 │   ├── qq-group.png        ← QQ 群二维码（已裁好）
 │   ├── qq-group-original.png  ← 二维码原图备份，可删
 │   ├── avatars/
-│   │   └── av01~12.jpg     ← 干员头像（12 张）
-│   └── gallery/
-│       └── g1.svg ~ g6.svg ← 图集占位
+│   │   ├── av01~12.jpg     ← 干员头像（12 张）
+│   │   └── member-xlk.jpg  ← 小恐龙的真人头像
 └── docs/
     └── superpowers/specs/  ← 设计规格文档
 ```
@@ -198,14 +238,14 @@ delta-force-team-site/
 想换整体配色，只改 `css/style.css` 开头 `:root` 里的变量：
 
 ```css
---purple-700: #4C0C56;   /* 卡片紫 */
+--surface:    #141B25;   /* 卡片底色 */
 --accent:     #22C55E;   /* 强调绿 */
---bg:         #0C1219;   /* 页面底色 */
+--bg:         #0A0F16;   /* 页面底色 */
 ```
 
 ---
 
-## 六、已实现的功能
+## 七、已实现的功能
 
 - 手机 / 平板 / 桌面全尺寸响应式，窄屏自动折叠成汉堡菜单
 - 顶部导航滚动吸附 + 当前板块自动高亮
@@ -219,7 +259,7 @@ delta-force-team-site/
 
 ---
 
-## 七、还没做的（明确不在范围内）
+## 八、还没做的（明确不在范围内）
 
 - 在线报名表单 / 数据收集
 - 后台管理、登录、数据库
