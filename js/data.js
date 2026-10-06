@@ -41,7 +41,7 @@ var STARS = {
    date 可以不写：不写就不显示左侧的日期方块，卡片自动变两栏
 */
 var ACHIEVEMENTS = [
-  { date: '2025', title: '全国高校赛',   rank: '四强' },
+  { title: '全国高校赛',   rank: '四强' },
   { title: '北部赛区',     rank: '冠军' },
   { title: '山河杯',       rank: '冠军' },
   { title: '北疆英雄杯',   rank: '冠军' },
@@ -93,7 +93,8 @@ var MEMBERS = [
   { name: '春风秋雨行',      gameId: 'HIT春风秋雨行' },
   { name: '玉面手雷王',      gameId: 'HIT玉面手雷王' },
   { name: 'bbbing',         gameId: 'HIT、bbbing' },
-  { name: '第n个人',         gameId: 'HIT、第n个人' }
+  { name: '第n个人',         gameId: 'HIT、第n个人' },
+  { name: '茉铭' }
 ];
 
 /* ---------- 队伍简介旁边的三张定位卡 ---------- */
