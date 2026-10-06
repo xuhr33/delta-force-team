@@ -484,7 +484,7 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
 .profile__art img { width: 100%; height: 100%; min-height: 340px; object-fit: cover; object-position: 50% 22%; }
 .profile__art::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(9,14,20,0) 55%, rgba(9,14,20,.85) 100%);
+  background: linear-gradient(90deg, rgba(9,14,20,0) 72%, rgba(9,14,20,.7) 100%);
 }
 
 .profile__info {
@@ -505,7 +505,6 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
 .profile__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0 0 20px; }
 .profile__stats dt { margin-bottom: 3px; font-size: 11px; letter-spacing: .14em; color: var(--text-3); }
 .profile__stats dd { margin: 0; font-size: 15px; color: #fff; }
-.profile__stats dd.is-empty { color: var(--text-3); }
 
 .profile__quote {
   margin: 0; padding: 4px 0 4px 16px;

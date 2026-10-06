@@ -346,11 +346,11 @@
       : PF_FIELDS;
     if (isStaff && m.note) fields = fields.concat([{ key: 'note', label: '荣誉' }]);
 
-    var stats = fields.map(function (f) {
-      var v = m[f.key];
+    /* 只显示有值的字段。没有就不显示这一块，不占位、不写「待补充」 */
+    var stats = fields.filter(function (f) { return m[f.key]; }).map(function (f) {
       return h('div', null,
         h('dt', { text: f.label }),
-        h('dd', { class: v ? null : 'is-empty', text: v || '待补充' })
+        h('dd', { text: m[f.key] })
       );
     });
     if (m.note) {
@@ -360,6 +360,7 @@
       ));
     }
     pfStats.replaceChildren.apply(pfStats, stats);
+    pfStats.hidden = stats.length === 0;
 
     pfQuote.textContent = m.quote ? '「' + m.quote + '」' : '';
     pfCount.textContent = (pfIndex + 1) + ' / ' + pfList.length;
