@@ -344,7 +344,8 @@
     var fields = isStaff
       ? [{ key: 'role', label: '身份' }]
       : PF_FIELDS;
-    if (isStaff && m.note) fields = fields.concat([{ key: 'note', label: '荣誉' }]);
+    /* note 所有人都显示（明星队员的「国家队预选赛队员」也靠它） */
+    if (m.note) fields = fields.concat([{ key: 'note', label: '荣誉' }]);
 
     /* 只显示有值的字段。没有就不显示这一块，不占位、不写「待补充」 */
     var stats = fields.filter(function (f) { return m[f.key]; }).map(function (f) {
@@ -353,12 +354,6 @@
         h('dd', { text: m[f.key] })
       );
     });
-    if (m.note) {
-      stats.push(h('div', null,
-        h('dt', { text: '荣誉' }),
-        h('dd', { text: m.note })
-      ));
-    }
     pfStats.replaceChildren.apply(pfStats, stats);
     pfStats.hidden = stats.length === 0;
 

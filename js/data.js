@@ -74,7 +74,7 @@ var MEMBERS = [
   { name: '高金兵',          gameId: 'HIT、高金兵' },
   { name: '菜花',            gameId: 'HIT、菜花' },
   { name: 'MAVZ',           gameId: 'HIT、MAVZ' },
-  { name: '许子远',          gameId: 'HIT、许子远' },
+  { name: '许子远',          gameId: 'HIT、许子远', avatar: 'images/avatars/av10.jpg', note: 'HIT 最帅之人' },
   { name: '小恐龙',          gameId: 'HIT、小恐龙', avatar: 'images/avatars/member-xlk.jpg' },
   { name: '小狼嗷',          gameId: 'HIT、小狼嗷' },
   { name: 'Austral1s',      gameId: 'HIT、Austral1s' },
