@@ -64,7 +64,7 @@ var ACHIEVEMENTS = [
      avatar 头像路径，如 'images/members/m1.jpg'；不填则显示首字头像
 */
 var MEMBERS = [
-  { name: '奈瑟卡特',        gameId: 'HIT、奈瑟卡特' },
+  { name: '奈瑟卡特',        gameId: 'HIT、奈瑟卡特', team: 'A 队', captain: true },
   { name: 'Yahbim',         gameId: 'HIT、Yahbim' },
   { name: '水無月MINAZUKI',  gameId: 'HIT、水無月MINAZUKI' },
   { name: 'hanluo',         gameId: 'HIT、hanluo' },
@@ -72,7 +72,7 @@ var MEMBERS = [
   { name: '友利七奈',        gameId: 'HIT、友利七奈' },
   { name: '人好话不多说',    gameId: '人好话不多说' },
   { name: '高金兵',          gameId: 'HIT、高金兵' },
-  { name: '菜花',            gameId: 'HIT、菜花' },
+  { name: '菜花',            gameId: 'HIT、菜花', team: 'C 队', captain: true },
   { name: 'MAVZ',           gameId: 'HIT、MAVZ' },
   { name: '许子远',          gameId: 'HIT、许子远', avatar: 'images/avatars/av10.jpg', note: 'HIT 最帅之人' },
   { name: '小恐龙',          gameId: 'HIT、小恐龙', avatar: 'images/avatars/member-xlk.jpg' },
@@ -82,7 +82,7 @@ var MEMBERS = [
   { name: '雨暮花落',        gameId: 'HIT、雨暮花落' },
   { name: '鸣濑白羽',        gameId: 'HIT、鸣濑白羽' },
   { name: '薯条大王',        gameId: 'HIT、薯条大王' },
-  { name: '玖酒仙儿',        gameId: 'HIT、玖酒仙儿', role: '指挥官', lead: true },
+  { name: '玖酒仙儿',        gameId: 'HIT、玖酒仙儿', role: '指挥官', team: 'E 队', captain: true, lead: true },
   { name: '白宇BaiYu',      gameId: 'HIT、白宇BaiYu' },
   { name: '小飞鼠II',        gameId: 'HIT、小飞鼠II' },
   { name: '巅峰之作',        gameId: 'HIT、巅峰之作' },
@@ -94,7 +94,16 @@ var MEMBERS = [
   { name: '玉面手雷王',      gameId: 'HIT玉面手雷王' },
   { name: 'bbbing',         gameId: 'HIT、bbbing' },
   { name: '第n个人',         gameId: 'HIT、第n个人' },
-  { name: '茉铭',            gameId: 'HIT、茉铭' }
+  { name: '茉铭',            gameId: 'HIT、茉铭', team: 'D 队', captain: true },
+
+  /* ---- 以下为第二批补充的队员，按所属队伍排 ---- */
+  { name: 'RocXOvO',        gameId: 'HIT、RocXOvO',  team: 'A 队' },
+  { name: '贝勒',            gameId: 'HIT、贝勒',      team: 'B 队' },
+  { name: 'muyasami',       gameId: 'HIT、muyasami', team: 'B 队' },
+  { name: 'sanwu82',        gameId: 'HIT、sanwu82',  team: 'C 队' },
+  { name: 'error',          gameId: 'HIT、error',    team: 'C 队' },
+  { name: 'weita',          gameId: 'HIT、weita',    team: 'D 队' },
+  { name: 'ak',             gameId: 'HIT、ak',       team: 'E 队' }
 ];
 
 /* ---------- 鸣谢 ----------

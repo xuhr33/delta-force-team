@@ -216,7 +216,10 @@
       nodes.push(h('li', { class: 'leadcard reveal' },
         h('img', { class: 'leadcard__avatar', src: src, alt: m.name + ' 的头像' }),
         h('div', { class: 'leadcard__body' },
-          h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
+          h('div', { class: 'leadcard__badges' },
+            h('span', { class: 'leadcard__badge', text: m.role || '核心队员' }),
+            m.team ? h('span', { class: 'leadcard__badge leadcard__badge--cap', text: m.team + '队长' }) : null
+          ),
           h('p', { class: 'leadcard__name', text: m.name }),
           m.gameId ? h('p', { class: 'leadcard__gid', text: m.gameId }) : null,
           m.quote ? h('p', { class: 'leadcard__quote', text: '「' + m.quote + '」' }) : null
@@ -254,7 +257,10 @@
       var rowKids = [
         h('img', { class: 'member__avatar', src: mSrc, alt: displayName + ' 的头像', loading: 'lazy' }),
         h('div', { class: 'member__id' },
-          h('h3', { class: 'member__name', text: displayName })
+          h('h3', { class: 'member__name' },
+            displayName,
+            teamBadge(m)
+          )
         )
       ];
 
@@ -319,10 +325,17 @@
   var pfLastFocus = null;
 
   var PF_FIELDS = [
+    { key: 'team',   label: '队伍' },
     { key: 'role',   label: '位置' },
     { key: 'rank',   label: '段位' },
     { key: 'joined', label: '入队时间' }
   ];
+
+  /* 队伍标记：队长显示「A 队队长」，普通队员显示「A 队」 */
+  function teamBadge(m) {
+    if (!m.team) return null;
+    return h('span', { class: 'capbadge', text: m.team + (m.captain ? '队长' : '') });
+  }
 
   function pfRender() {
     var m = pfList[pfIndex];
@@ -348,10 +361,15 @@
     if (m.note) fields = fields.concat([{ key: 'note', label: '荣誉' }]);
 
     /* 只显示有值的字段。没有就不显示这一块，不占位、不写「待补充」 */
-    var stats = fields.filter(function (f) { return m[f.key]; }).map(function (f) {
+    function fieldValue(f) {
+      if (f.key === 'team') return m.team ? (m.team + (m.captain ? '队长' : '')) : '';
+      return m[f.key];
+    }
+
+    var stats = fields.filter(function (f) { return fieldValue(f); }).map(function (f) {
       return h('div', null,
         h('dt', { text: f.label }),
-        h('dd', { text: m[f.key] })
+        h('dd', { text: fieldValue(f) })
       );
     });
     pfStats.replaceChildren.apply(pfStats, stats);
