@@ -1,0 +1,22 @@
+# 每次有人改内容（直接 push 或提 PR），自动检查有没有把站点改坏。
+# 检查不通过会在 GitHub 上显示红叉，直接 push 的话你邮箱也会收到通知。
+name: 站点自检
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 跑检查
+        run: node .github/check-site.js
