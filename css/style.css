@@ -755,6 +755,14 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
   margin-bottom: 10px; padding-bottom: 9px; border-bottom: 1px solid var(--line);
   font-size: 16px; font-weight: 700; color: #fff;
 }
+/* 卡片里单独标出来的一句提醒 */
+.std-card__note {
+  margin-top: 12px; padding: 10px 14px;
+  border-left: 2px solid var(--gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--gold-soft);
+  font-size: 13.5px; line-height: 1.7; color: var(--gold);
+}
 .std-card__reqs { counter-reset: rq; }
 .std-card__reqs li { position: relative; padding-left: 24px; margin-bottom: 7px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.76); }
 .std-card__reqs li:last-child { margin-bottom: 0; }

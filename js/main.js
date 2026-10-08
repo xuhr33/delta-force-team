@@ -594,7 +594,8 @@
               h('p', { class: 'std-card__name', text: it.name }),
               h('ol', { class: 'std-card__reqs' }, (it.reqs || []).map(function (r) {
                 return h('li', { text: r });
-              }))
+              })),
+              it.note ? h('p', { class: 'std-card__note', text: it.note }) : null
             );
           })));
         });
