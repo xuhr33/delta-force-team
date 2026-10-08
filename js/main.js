@@ -378,7 +378,7 @@
   var GHOST = {
     placeholder: true,
     name: '下一个',
-    quote: '这个位置还空着 —— 想填的话，加 QQ 群 541072642。'
+    quote: '这个位置还空着 —— 想填的话，加 QQ 群 648764352。'
   };
 
   function openGhost() { openProfile([GHOST], 0); }
