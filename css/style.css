@@ -709,14 +709,18 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
   font-size: 12px; font-weight: 700; line-height: 22px; text-align: center;
 }
 
+/* 没有二维码，就是一张纯文字的群号卡 */
 .contactcard {
-  display: flex; align-items: center; gap: 18px; padding: 16px;
+  padding: 22px 24px;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: linear-gradient(140deg, var(--surface-2), var(--bg-2));
 }
-.contactcard__qr { width: 122px; height: 122px; flex: none; padding: 6px; border-radius: var(--radius-sm); background: #fff; object-fit: contain; }
 .contactcard__label { font-size: 12px; letter-spacing: .08em; color: var(--text-3); }
-.contactcard__value { margin: 2px 0 12px; font-size: 24px; font-weight: 800; letter-spacing: .05em; color: var(--accent); }
+.contactcard__value {
+  margin: 4px 0 14px;
+  font-size: 32px; font-weight: 800; letter-spacing: .06em; line-height: 1.2;
+  color: var(--accent);
+}
 
 /* ---------- 考核标准 ---------- */
 .std-caption { margin: -6px 0 16px; font-size: 13px; letter-spacing: .06em; color: var(--text-3); }
@@ -977,8 +981,8 @@ body.nav-open .topnav__toggle span:nth-child(3) { transform: translateY(-6px) ro
   .star__avatar { width: 64px; height: 64px; }
   .star__name { font-size: 15px; }
 
-  .contactcard { flex-direction: column; text-align: center; }
-  .contactcard__qr { width: 152px; height: 152px; }
+
+
 
   .footer { flex-direction: column; text-align: center; }
   .to-top { right: 16px; bottom: 16px; width: 42px; height: 42px; }
